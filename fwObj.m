@@ -29,7 +29,8 @@ classdef fwObj < handle
     %
     %  Methods:
     %           make_xdc        - Generate transducer properties based on
-    %                             transducer type and focusing
+    %                             transducer type and focusing, returns xdc
+    %                             property of obj
     %
     %  James Long, 03/09/2018
     
@@ -37,9 +38,7 @@ classdef fwObj < handle
         input_vars
         grid_vars
         field_maps
-        
         xdc
-        txrx_maps
     end
     
     methods
@@ -50,7 +49,7 @@ classdef fwObj < handle
             p = inputParser;
             %%% Add defaults for optional requirements %%%%%%%%%%%%%%%%%%%%
             addOptional(p,'c0',1540)
-            addOptional(p,'td',40e-6)
+            addOptional(p,'td',100e-6)
             addOptional(p,'p0',1e5)
             addOptional(p,'ppw',15)
             addOptional(p,'cfl',0.4)
