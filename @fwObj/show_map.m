@@ -6,7 +6,7 @@ function show_map(obj, map_name)
 %           obj.show_map(map_name)
 %
 %  Parameters:
-%           map_name            - Name of map to display (cmap)
+%           map_name            - Name of map to display ('cmap')
 %
 %  James Long, 03/10/2018
 
