@@ -7,7 +7,7 @@ function obj = make_speckle(obj, sc_params)
 %
 %  Parameters:
 %           sc_params       - Structure of scatterer parameters
-%                               n_scat:     Scatterers per resolution cell (25)
+%                               n_scat:     Scatterers per resolution cell (15)
 %                               csr:        Scatterer impedance contrast (0.05)
 %                               n_lesion:   Number of lesions (0)
 %                               r_lesion:   Vector of lesion radii, length
@@ -52,6 +52,6 @@ if n_lesion
 end
 
 %%% Superimpose original cmap and cscatmap %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-obj.field_maps.cmap = obj.field_maps.cmap-cscatmap*csr*obj.input_vars.c0;
+obj.field_maps.cmap = obj.field_maps.cmapi-cscatmap*csr*obj.input_vars.c0;
 
 end
