@@ -30,8 +30,8 @@ if ~exist('n_lesion','var'), n_lesion = 0; end
 
 %%% Calculate resolution cell using input variables %%%%%%%%%%%%%%%%%%%%%%%
 res_cell = rescell2d(obj.input_vars.c0, obj.input_vars.omega0, obj.input_vars.wZ/2,...
-    obj.input_vars.wY, obj.input_vars.ncycles, obj.input_vars.dY,...
-    obj.input_vars.dZ);
+    obj.input_vars.wY, obj.input_vars.ncycles, obj.grid_vars.dY,...
+    obj.grid_vars.dZ);
 
 %%% Randomly place scatterers according to density %%%%%%%%%%%%%%%%%%%%%%%%
 scat_density = n_scat/res_cell;
