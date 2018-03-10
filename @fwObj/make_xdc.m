@@ -12,6 +12,8 @@ function obj = make_xdc(obj, tx_params)
 %                                       or 'focused')
 %                               focus:  Focal position in [y,z]
 %                               theta:  Transmit steering angle
+%
+%  James Long 03/10/2018
 
 obj.xdc = xdc_lib(tx_params.name);
 obj.xdc.inmap = zeros(size(obj.field_maps.cmap));
