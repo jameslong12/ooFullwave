@@ -9,6 +9,7 @@ classdef fwObj < handle
     %
     %  Optional parameters (default):
     %           f0              - Center frequency in MHz (1)
+    %           ncycles         - Excitation cycles (2)
     %           c0              - Speed of sound in m/s (1540)
     %           td              - Time duration of simulation in s (40e-6)
     %           p0              - Pressure amplitude of transmit in Pa (1e5)
@@ -63,7 +64,7 @@ classdef fwObj < handle
             addOptional(p,'atten',0)
             addOptional(p,'bovera',-2)
             addOptional(p,'f0',1)
-            addOptional(
+            addOptional(p,'ncycles',2)
             
             %%% Parse inputs and extract variables from p %%%%%%%%%%%%%%%%%
             p.parse(varargin{:})
@@ -96,6 +97,7 @@ classdef fwObj < handle
             obj.input_vars = struct('c0',c0,...
                 'td',td,...
                 'p0',p0,...
+                'ncycles',ncycles,...
                 'ppw',ppw,...
                 'cfl',cfl,...
                 'wY',wY,...
