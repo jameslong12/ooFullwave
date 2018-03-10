@@ -33,7 +33,7 @@ if strcmp(obj.xdc.type, 'curvilinear')
     obj.xdc.xdc_plot = figure;
     plot(y*1e3, z*1e3, 'linewidth', 2); axis('image','ij')
     xlabel('y (mm)'); ylabel('z (mm)'); title(obj.xdc.name);
-    set(gcf, 'visible', 'off'); close all;
+    set(gcf, 'visible', 'off');
     
     %%% Calculate indices of xdc in space %%%%%%%%%%%%%%%%%%%%%
     [~,idx_y] = min(abs(obj.grid_vars.y_axis-y'));
