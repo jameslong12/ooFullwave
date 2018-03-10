@@ -31,6 +31,10 @@ classdef fwObj < handle
     %           make_xdc        - Generate transducer properties based on
     %                             transducer type and focusing, returns xdc
     %                             property of obj
+    %           gen_speckle     - Generate a field of scatters by changing
+    %                             cmap, with an option to add lesions
+    %           do_sim          - Perform the simulation and return the
+    %                             channel data
     %
     %  James Long, 03/09/2018
     
@@ -59,6 +63,7 @@ classdef fwObj < handle
             addOptional(p,'atten',0)
             addOptional(p,'bovera',-2)
             addOptional(p,'f0',1)
+            addOptional(
             
             %%% Parse inputs and extract variables from p %%%%%%%%%%%%%%%%%
             p.parse(varargin{:})
@@ -120,6 +125,8 @@ classdef fwObj < handle
         end
         
         obj = make_xdc(obj, tx_params);
+        obj = gen_speckle(obj, sc_params);
+        rf = do_sim(obj);
         
     end
     
