@@ -26,15 +26,8 @@ if obj.grid_vars.dY > obj.xdc.pitch, error('Grid spacing is too large.'); end
 if strcmp(obj.xdc.type, 'curvilinear')
     dtheta = atand(obj.xdc.pitch/obj.xdc.r);
     span = 2*obj.xdc.r*sind((obj.xdc.n-1)*dtheta/2);
-    
     y = -span/2:obj.grid_vars.dY:span/2;
     z = sqrt(obj.xdc.r^2.-y.^2); z = z-min(z);
-    
-    %%% Store xdc trace as figure handle %%%%%%%%%%%%%%%%%%%%%%
-    obj.xdc.xdc_plot = figure;
-    plot(y*1e3, z*1e3, 'linewidth', 2); axis('image','ij')
-    xlabel('y (mm)'); ylabel('z (mm)'); title(obj.xdc.name);
-    set(gcf, 'visible', 'off');
     
     %%% Calculate indices of xdc in space %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [~,idx_y] = min(abs(obj.grid_vars.y_axis-y'));
