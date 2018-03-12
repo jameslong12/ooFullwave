@@ -32,6 +32,13 @@ end
 ncoordsout=size(obj.xdc.outcoords,1);
 nRun=sizeOfFile('genout.dat')/4/ncoordsout;
 genout = readGenoutSlice(['genout.dat'],0:nRun-1,size(obj.xdc.outcoords,1));
-rf = reshape(genout,size(genout,1),size(modidy,2),size(modidy,1));
+for idx = 1:size(obj.xdc.outcoords)
+    genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = double(genout(:,idx));
+end
+
+%%% Average across output to reconstruct element traces %%%%%%%%%%%%%%%%%%%
+for idx = 1:obj.xdc.n
+    rf(:,idx) = mean(genout_re(:,obj.xdc.e_ind(idx,:)),2);
+end
 
 end
