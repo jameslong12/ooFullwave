@@ -27,6 +27,8 @@ if strcmp(obj.xdc.type, 'curvilinear')
         delays = curv_delays+foc_delays';
     end
     
+    tfield = repmat(obj.grid_vars.t_axis,size(obj.xdc.incoords,1)/4,1)-repmat(delays',1,obj.grid_vars.nT);
+    
 elseif strcmp(obj.xdc.type, 'linear')
     if strcmp(tx_params.event, 'plane')
         theta_delays = obj.grid_vars.y_axis(obj.xdc.idx_y)*tand(tx_params.theta)/obj.input_vars.c0;
@@ -37,10 +39,10 @@ elseif strcmp(obj.xdc.type, 'linear')
         delays = (foc_delays-min(foc_delays))';
     end
     
+    tfield = repmat(obj.grid_vars.t_axis,size(obj.xdc.incoords,1)/3,1)-repmat(delays',1,obj.grid_vars.nT);
+    
 else
     error('Unrecognized type.')
 end
-
-tfield = repmat(obj.grid_vars.t_axis,size(obj.xdc.incoords,1)/4,1)-repmat(delays',1,obj.grid_vars.nT);
 
 end
