@@ -20,7 +20,7 @@ switch map_name
         map = obj.field_maps.rhomap';
         lim = [0.75*obj.input_vars.rho 1.25*obj.input_vars.rho];
     case {'attenmap', 'atten'}
-        map = obj.field_maps.attenmap';\
+        map = obj.field_maps.attenmap';
         lim = [0 obj.input_vars.atten];
     case {'boveramap', 'bovera'}
         map = obj.field_maps.boveramap';
