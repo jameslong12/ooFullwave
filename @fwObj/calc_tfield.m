@@ -12,8 +12,7 @@ function tfield = calc_tfield(obj, tx_params)
 %  James Long, 03/09/2018
 
 if strcmp(obj.xdc.type, 'curvilinear')
-    
-    %%% Calculate delays due to curvilinear shape and steering %%%%%%%%
+    %%% Calculate delays due to curvilinear shape and steering %%%%%%%%%%%%
     curv_delays = obj.grid_vars.z_axis(obj.xdc.idx_z)/obj.input_vars.c0;
     curv_delays = curv_delays-min(curv_delays);
     
@@ -29,6 +28,15 @@ if strcmp(obj.xdc.type, 'curvilinear')
     end
     
 elseif strcmp(obj.xdc.type, 'linear')
+    if strcmp(tx_params.event, 'plane')
+        theta_delays = obj.grid_vars.y_axis(obj.xdc.idx_y)*tand(tx_params.theta)/obj.input_vars.c0;
+        delays = (theta_delays-min(theta_delays))';
+    elseif strcmp(tx_params.event, 'focused')
+        y_pos =  [obj.grid_vars.y_axis(obj.xdc.idx_y)' zeros(length(obj.xdc.idx_y),1)];
+        foc_delays = -sqrt(sum((y_pos-tx_params.focus).^2,2))/obj.input_vars.c0;
+        delays = (foc_delays-min(foc_delays))';
+    end
+    
 else
     error('Unrecognized type.')
 end
