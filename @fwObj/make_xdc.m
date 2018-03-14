@@ -58,7 +58,7 @@ if strcmp(obj.xdc.type, 'curvilinear')
     %%% Calculate element index spans %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     e_size = round(size(idx_y,2)/obj.xdc.n);
     e_start = round(linspace(1, size(idx_y,2)-e_size+1, obj.xdc.n));
-    obj.xdc.e_ind = [e_start' (e_start+e_size)'];
+    obj.xdc.e_ind = [e_start' (e_start+e_size-1)'];
     
 elseif strcmp(obj.xdc.type, 'linear')
     span = obj.xdc.n*obj.xdc.pitch;
@@ -89,7 +89,7 @@ elseif strcmp(obj.xdc.type, 'linear')
     %%% Calculate element index spans %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     e_size = round(size(idx_y,2)/obj.xdc.n);
     e_start = round(linspace(1, size(idx_y,2)-e_size+1, obj.xdc.n));
-    obj.xdc.e_ind = [e_start' (e_start+e_size)'];
+    obj.xdc.e_ind = [e_start' (e_start+e_size-1)'];
     
 else
     error('Unsupported transducer type.')
