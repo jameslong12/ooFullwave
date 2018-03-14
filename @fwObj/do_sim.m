@@ -52,7 +52,7 @@ else
     
     %%% Average across output to reconstruct element traces %%%%%%%%%%%%%%%
     for idx = 1:obj.xdc.n
-        out(:,idx) = mean(genout_re(:,obj.xdc.e_ind(idx,:)),2);
+        out(:,idx) = mean(genout_re(:,obj.xdc.e_ind(idx,1):obj.xdc.e_ind(idx,2)),2);
     end
 end
 
