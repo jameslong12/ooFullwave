@@ -131,7 +131,7 @@ classdef fwObj < handle
         end
         
         obj = make_xdc(obj, tx_params);
-        obj = gen_speckle(obj, sc_params);
+        obj = make_speckle(obj, sc_params);
         show_map(obj, map_name);
         rf = do_sim(obj, field_flag);
         
