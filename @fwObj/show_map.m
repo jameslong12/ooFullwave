@@ -32,7 +32,7 @@ end
 imagesc(obj.grid_vars.y_axis*1e3, obj.grid_vars.z_axis*1e3, map, lim)
 xlabel('y (mm)'); ylabel('z (mm)'); title(map_name);
 axis image
-colormap jet
+colormap parula
 colorbar
 
 end
