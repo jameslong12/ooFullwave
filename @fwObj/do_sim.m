@@ -13,7 +13,7 @@ function out = do_sim(obj, field_flag)
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
 if field_flag
-    p_size = round(obj.xdc.pitch/obj.grid_vars.dY);
+    p_size = ceil(obj.xdc.pitch/obj.grid_vars.dY);
     [modidy, modidz] = meshgrid(1:p_size:obj.grid_vars.nY,1:p_size:obj.grid_vars.nZ);
     obj.xdc.outmap(modidy,modidz) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
