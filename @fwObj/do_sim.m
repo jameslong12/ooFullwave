@@ -8,12 +8,13 @@ function out = do_sim(obj, field_flag)
 %  Parameters: 
 %           field_flag          - Flag to indicate entire field output
 %
-%  James Long 03/10/2018
+%  James Long 06/05/2018
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
 if field_flag
-    obj.xdc.outmap = ones(size(obj.xdc.outmap));
+    [modidy, modidz] = meshgrid(1:obj.xdc.e_size:obj.grid_vars.nY,1:obj.xdc.e_size:obj.grid_vars.nZ);
+    obj.xdc.outmap(modidy,modidz) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
 end
 
@@ -22,8 +23,8 @@ if ispc
     launchTotalFullWaveRebuild2(obj.input_vars.c0, obj.input_vars.omega0,...
         obj.input_vars.wY, obj.input_vars.wZ, obj.input_vars.td,...
         obj.input_vars.p0, obj.input_vars.ppw, obj.input_vars.cfl,...
-        obj.field_maps.cmap', obj.field_maps.rhomap', obj.field_maps.attenmap',...
-        obj.field_maps.boveramap', obj.xdc.incoords, obj.xdc.outcoords,...
+        obj.field_maps.cmap, obj.field_maps.rhomap, obj.field_maps.attenmap,...
+        obj.field_maps.boveramap, obj.xdc.incoords, obj.xdc.outcoords,...
         obj.xdc.icmat);
 elseif isunix
     launchTotalFullWave2(obj.input_vars.c0, obj.input_vars.omega0,...
@@ -43,8 +44,9 @@ end
 ncoordsout=size(obj.xdc.outcoords,1);
 nRun=sizeOfFile('genout.dat')/4/ncoordsout;
 genout = readGenoutSlice(['genout.dat'],0:nRun-1,size(obj.xdc.outcoords,1));
+
 if field_flag
-    out = reshape(genout, size(genout,1), size(obj.xdc.outmap,2), size(obj.xdc.outmap,1));
+    out = reshape(genout,size(genout,1),size(modidy,2),size(modidy,1));
 else
     for idx = 1:size(obj.xdc.outcoords)
         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = double(genout(:,idx));
