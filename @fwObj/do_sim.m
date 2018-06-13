@@ -13,7 +13,7 @@ function out = do_sim(obj, field_flag)
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
 if field_flag
-    p_size = ceil(obj.xdc.pitch/obj.grid_vars.dY);
+    p_size = 2;
     [modidy, modidz] = meshgrid(1:p_size:obj.grid_vars.nY,1:p_size:obj.grid_vars.nZ);
     obj.xdc.outmap(modidy,modidz) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
@@ -35,7 +35,8 @@ elseif isunix
         obj.field_maps.boveramap', obj.xdc.incoords, obj.xdc.outcoords,...
         obj.xdc.icmat);
     tic
-    !./try6_nomex_selfcontained_ts
+    !./try6_nomex
+    %!./try6_nomex_selfcontained_ts
     toc
 else
     error('Fullwave is not supported on your operating system.')
