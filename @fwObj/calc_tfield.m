@@ -34,13 +34,13 @@ elseif strcmp(obj.xdc.type, 'linear')
         theta_delays = obj.grid_vars.y_axis(obj.xdc.idx_y)*tand(tx_params.theta)/obj.input_vars.c0;
         delays = (theta_delays-min(theta_delays));
     elseif strcmp(tx_params.event, 'focused')
-        y_pos =  [obj.grid_vars.y_axis(obj.xdc.idx_y)' zeros(length(obj.xdc.idx_y),1)];
+        y_pos =  [obj.grid_vars.y_axis' zeros(length(obj.grid_vars.y_axis),1)];
         foc_delays = -sqrt(sum((y_pos-tx_params.focus).^2,2))/obj.input_vars.c0;
         delays = (foc_delays-min(foc_delays))';
     end
     
-    tfield = repmat(obj.grid_vars.t_axis,size(obj.xdc.incoords,1)/3,1)-repmat(delays',1,obj.grid_vars.nT);
-    
+    tfield = repmat(obj.grid_vars.t_axis,obj.grid_vars.nY,1)-repmat(delays',1,obj.grid_vars.nT);
+    tfield = tfield - obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
 else
     error('Unrecognized type.')
 end
