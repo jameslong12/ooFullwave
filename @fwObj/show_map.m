@@ -24,7 +24,7 @@ switch map_name
         lim = [0 obj.input_vars.atten];
     case {'boveramap', 'bovera'}
         map = obj.field_maps.boveramap';
-        lim = [0 obj.input_vars.boveramap];
+        lim = [0 obj.input_vars.bovera];
     otherwise
         error('Invalid map name.')
 end

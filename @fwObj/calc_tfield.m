@@ -32,7 +32,7 @@ if strcmp(obj.xdc.type, 'curvilinear')
 elseif strcmp(obj.xdc.type, 'linear')
     if strcmp(tx_params.event, 'plane')
         theta_delays = obj.grid_vars.y_axis(obj.xdc.idx_y)*tand(tx_params.theta)/obj.input_vars.c0;
-        delays = (theta_delays-min(theta_delays))';
+        delays = (theta_delays-min(theta_delays));
     elseif strcmp(tx_params.event, 'focused')
         y_pos =  [obj.grid_vars.y_axis(obj.xdc.idx_y)' zeros(length(obj.xdc.idx_y),1)];
         foc_delays = -sqrt(sum((y_pos-tx_params.focus).^2,2))/obj.input_vars.c0;
