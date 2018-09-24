@@ -8,7 +8,7 @@ classdef fwObj < handle
     %           obj = fwObj(varargin)
     %
     %  Optional parameters (default):
-    %           f0              - Center frequency in MHz (1)
+    %           f0              - Center frequency in Hz (1e6)
     %           ncycles         - Excitation cycles (2)
     %           c0              - Speed of sound in m/s (1540)
     %           td              - Time duration of simulation in s (40e-6)
@@ -63,7 +63,7 @@ classdef fwObj < handle
             addOptional(p,'rho',1000)
             addOptional(p,'atten',0)
             addOptional(p,'bovera',-2)
-            addOptional(p,'f0',1)
+            addOptional(p,'f0',1e6)
             addOptional(p,'ncycles',2)
             
             %%% Parse inputs and extract variables from p %%%%%%%%%%%%%%%%%
@@ -75,7 +75,7 @@ classdef fwObj < handle
             end
             
             %%% Grid size calculations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            omega0 = 2*pi*f0*1e6;
+            omega0 = 2*pi*f0;
             lambda = c0/omega0*2*pi;
             nY = round(wY/lambda*ppw);
             nZ = round(wZ/lambda*ppw);
