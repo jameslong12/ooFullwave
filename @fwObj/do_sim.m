@@ -17,6 +17,9 @@ if field_flag
     [modidy, modidz] = meshgrid(1:p_size:obj.grid_vars.nY,1:p_size:obj.grid_vars.nZ);
     obj.xdc.outmap(modidy,modidz) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
+else
+    obj.xdc.outmap = obj.xdc.inmap;
+    obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
 end
 
 %%% Launch FullWave executable %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
