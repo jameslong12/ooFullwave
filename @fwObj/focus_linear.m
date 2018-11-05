@@ -1,6 +1,5 @@
 function obj = focus_linear(obj, focus)
 
-
 %%% Initialize inmap and incoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.xdc.inmap(1:obj.grid_vars.nY,1:3) = 1;
 obj.xdc.incoords = mapToCoords(obj.xdc.inmap);
