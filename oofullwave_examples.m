@@ -17,7 +17,7 @@ sim.xdc.kerf = 3.25e-5;         % Interelement spacing
 sim = make_xdc(sim);            % Call to calculate other parameters
 
 %%% Plane transmit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-theta = 0;
+theta = 15; % in degrees
 sim = plane_linear(sim, theta);
 
 %%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,7 +43,7 @@ clear
 f0 = 1e6;
 fnum = 1;
 focus = [0 0.03];
-D = abs(focus(2))/fnum; % match simulation width to aperture width
+D = focus(2)/fnum; % match simulation width to aperture width
 
 %%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sim = fwObj('f0',f0,'wY',D,'wZ',4e-2, 'td', 4e-5);
