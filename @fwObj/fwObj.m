@@ -131,8 +131,10 @@ classdef fwObj < handle
         end
         
         obj = make_xdc(obj, tx_params);
+        obj = format_elements(obj);
         obj = focus_linear(obj, focus);
         obj = diverging_linear(obj, focus);
+        icmat_avg = average_icmat(obj,icmat);
         obj = make_speckle(obj, sc_params);
         show_map(obj, map_name);
         rf = do_sim(obj, field_flag);

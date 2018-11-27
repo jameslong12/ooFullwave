@@ -64,8 +64,10 @@ if strcmp(obj.xdc.type, 'curvilinear')
 elseif strcmp(obj.xdc.type, 'linear')
     obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
     e_size = round(obj.xdc.width/obj.grid_vars.dY);
-    e_start = round(linspace(1, obj.grid_vars.nY-e_size+1, obj.xdc.n));
-    obj.xdc.e_ind = [e_start' (e_start+e_size-1)'];
+    D = obj.xdc.pitch*obj.xdc.n; obj.xdc.nD = round(D/obj.grid_vars.dY);
+    e_start = round(linspace(1, obj.xdc.nD-e_size+1, obj.xdc.n));
+    e_ind_uncorr = [e_start' (e_start+e_size-1)'];
+    obj.xdc.e_ind = e_ind_uncorr+round((obj.grid_vars.nY/2)-mean(e_ind_uncorr(:)));
 else
     error('Unsupported transducer type.')
 end
