@@ -3,7 +3,7 @@ function icmat_avg = average_icmat(obj,icmat)
 icmat_avg = zeros(size(icmat));
 
 %%% Reindex elements based on icmat, not inmap
-ist = 1;
+ist = obj.xdc.e_ind(1);
 for i = 1:size(obj.xdc.e_ind,1)
     ind_new(i,:) = [ist ist+obj.xdc.e_ind(i,end)-obj.xdc.e_ind(i,1)];
     ist = ist+obj.xdc.e_ind(i,end)-obj.xdc.e_ind(i,1)+1;
