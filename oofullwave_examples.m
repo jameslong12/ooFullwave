@@ -46,10 +46,10 @@ focus = [0 0.03];
 D = focus(2)/fnum; % match simulation width to aperture width
 
 %%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sim = fwObj('f0',f0,'wY',D,'wZ',4e-2, 'td', 4e-5);
+sim = fwObj('f0',f0,'wY',0.08,'wZ',4e-2, 'td', 4e-5);
 
 %%% Specify transducer parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sim.xdc.n = 128;                % Number of elements
+sim.xdc.n = 64;                % Number of elements
 sim.xdc.type = 'linear';        % Curvilinear or linear
 sim.xdc.pitch = 0.000412;       % Center-to-center element spacing
 sim.xdc.kerf = 3.25e-5;         % Interelement spacing
