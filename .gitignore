@@ -1,2 +1,4 @@
 *.asv
 *.dat
+demo*
+slurm*
