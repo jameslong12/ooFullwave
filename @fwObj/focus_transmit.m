@@ -15,7 +15,7 @@ function icmat = focus_transmit(obj,idy,idz,icvec,incoords)
 cfl = obj.input_vars.cfl;
 
 dd = sqrt((incoords(:,1)-idy).^2+(incoords(:,2)-idz).^2);
-dd = -round(dd/cfl);
+dd = -round(dd/cfl); if idz<0; dd = -dd; end
 dd = dd-min(dd);
 
 icmat = zeros(size(incoords,1),length(icvec));
