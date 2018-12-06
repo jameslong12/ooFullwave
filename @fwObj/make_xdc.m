@@ -68,6 +68,8 @@ elseif strcmp(obj.xdc.type, 'linear')
     e_start = round(linspace(1, obj.xdc.nD-e_size+1, obj.xdc.n));
     e_ind_uncorr = [e_start' (e_start+e_size-1)'];
     obj.xdc.e_ind = e_ind_uncorr+round((obj.grid_vars.nY/2)-mean(e_ind_uncorr(:)));
+    if any(obj.xdc.e_ind(:)<1); error('Aperture too large for grid size.'); end
+    if ~isfield(obj.xdc,'on_elements'); obj.xdc.on_elements = 1:obj.xdc.n; end
 else
     error('Unsupported transducer type.')
 end

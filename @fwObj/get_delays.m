@@ -1,6 +1,6 @@
 function delays = get_delays(obj,focus)
 
-rx_pos = obj.xdc.out;
+rx_pos = obj.xdc.out(obj.xdc.on_elements,:);
 if(any(isinf(focus)))
     delays=zeros(1,size(rx_pos,1));
 else
