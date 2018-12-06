@@ -130,7 +130,7 @@ classdef fwObj < handle
             
         end
         
-        obj = make_xdc(obj, tx_params);
+        obj = make_xdc(obj);
         obj = format_elements(obj);
         obj = focus_linear(obj, focus);
         obj = diverging_linear(obj, focus);

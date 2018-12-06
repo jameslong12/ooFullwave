@@ -6,9 +6,14 @@ function out = do_sim(obj, field_flag)
 %           out = obj.do_sim(field_flag)
 %
 %  Parameters: 
-%           field_flag          - Flag to indicate entire field output
+%           field_flag          - Flag to indicate entire field output. 1
+%                                 for field pressure data output, 0 for
+%                                 channel data (default = 0).
 %
-%  James Long 06/05/2018
+%  Returns:
+%           out                 - Simulation result data
+%
+%  James Long 12/06/2018
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
