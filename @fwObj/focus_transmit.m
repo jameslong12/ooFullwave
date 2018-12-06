@@ -6,11 +6,12 @@ function icmat = focus_transmit(obj,idy,idz,icvec,incoords)
 %           obj             - Fullwave simulation object
 %           idy, idz        - y, z indices of focus point
 %           icvec           - Precalculated initial condition vector
+%           incoords        - Input coordinates for initial condition
 %
 %  Return:
 %           icmat           - Initial condition matrix
 %
-%  James Long, 09/24/2018
+%  James Long, 12/06/2018
 
 cfl = obj.input_vars.cfl;
 

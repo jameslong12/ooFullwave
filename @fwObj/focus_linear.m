@@ -1,5 +1,26 @@
 function obj = focus_linear(obj, focus)
 
+%  Function to create transmit related fields. Must call obj.make_xdc()
+%  prior to use.
+%
+%  Calling:
+%           obj.focus_linear(focus)
+%
+%  Parameters:
+%           focus           - Focal point in [y z] (m)
+%
+%  Returns:
+%           obj.xdc.inmap   - Input map for initial conditions
+%           obj.xdc.incoords- Paired coordinates of input and initial
+%                             conditions
+%           obj.xdc.icmat   - Initial condition matrix for wave form time
+%                             trace
+%           obj.xdc.out     - Element positions in [x y z] for beamforming
+%           obj.xdc.delays  - Time delays on elements in transmit
+%           obj.xdc.t0      - Time of first time index (s) for beamforming
+%
+%  James Long 12/06/2018
+
 %%% Initialize inmap and incoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.xdc.inmap(:,1:3) = 1;
 obj.xdc.incoords = mapToCoords(obj.xdc.inmap);
