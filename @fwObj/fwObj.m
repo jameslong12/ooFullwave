@@ -130,7 +130,7 @@ classdef fwObj < handle
         obj = focus_linear(obj, focus);
         icmat_avg = average_icmat(obj,icmat);
         delays = get_delays(focus,rx_pos,c);
-        obj = make_speckle(obj, sc_params);
+        obj = make_speckle(obj, varargin);
         show_map(obj, map_name);
         rf = do_sim(obj, field_flag);
         
