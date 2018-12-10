@@ -26,6 +26,11 @@ sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
 sim.xdc.n = 64;                             % Number of elements
 sim.make_xdc();                             % Call make_xdc to set up transducer
 
+%%
+sim.add_wall('r75hi')
+imagesc(sim.field_maps.cmap)
+
+%%
 %%% Focused transmit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 focus = [0 0.03];                           % Focal point in [y z] (m)
 sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
