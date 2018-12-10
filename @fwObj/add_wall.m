@@ -28,7 +28,7 @@ pad = round((nW-nY)/2);
 offset = round(offset/obj.grid_vars.dY);
 wall_select = (pad+1:pad+nY)+offset;
 
-
+if any(wall_select < 1) || any(wall_select > nW); error('Offset exceeds wall width.'); end
 cwall = cwall(wall_select,:); obj.field_maps.cmap(:,1:size(cwall,2)) = cwall;
 rhowall = rhowall(wall_select,:); obj.field_maps.rhomap(:,1:size(cwall,2)) = rhowall;
 awall = awall(wall_select,:); obj.field_maps.amap(:,1:size(cwall,2)) = awall;
