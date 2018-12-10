@@ -50,7 +50,7 @@ cscatmap = cscatmap/scat_density;
 %%% Create lesions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if nC
     if size(cC,1) ~= nC || length(rC) ~= nC || length(zC) ~= nC
-        error('r_lesion and c_lesion must be the same length as n_lesion.')
+        error('cC, rC, and zC must match nC.')
     end
     for idx = 1:nC
         [z_int, y_int] = meshgrid(obj.grid_vars.z_axis, obj.grid_vars.y_axis);
