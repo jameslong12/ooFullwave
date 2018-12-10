@@ -120,23 +120,17 @@ classdef fwObj < handle
                 't_axis',t_axis);
             
             obj.field_maps = struct('cmap',cmap,...
-                'cmapi',cmap,...
                 'rhomap',rhomap,...
-                'rhomapi',rhomap,...
                 'attenmap',attenmap,...
-                'attenmapi',attenmap,...
-                'boveramap',boveramap,...
-                'boveramapi',boveramap);
+                'boveramap',boveramap);
             
         end
         
         obj = make_xdc(obj);
-        obj = format_elements(obj);
         obj = focus_linear(obj, focus);
-        obj = diverging_linear(obj, focus);
         icmat_avg = average_icmat(obj,icmat);
         delays = get_delays(focus,rx_pos,c);
-        obj = make_speckle(obj, sc_params);
+        obj = make_speckle(obj, varargin);
         show_map(obj, map_name);
         rf = do_sim(obj, field_flag);
         
