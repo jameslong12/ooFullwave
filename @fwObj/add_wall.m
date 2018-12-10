@@ -1,24 +1,17 @@
 function obj = add_wall(obj, wall_name, offset)
 
-%  Function to create transducer related fields. Call parameters
-%  keywords-style.
+%  Function to add abdominal wall.
 %
 %  Calling:
-%           obj.make_speckle('nscat',15,'csr',0.05,'nC',0)
+%           obj.add_wall('r75hi')
 %
 %  Parameters:
-%           sc_params       - Structure of scatterer parameters
-%                               nscat:      Scatterers per resolution cell (15)
-%                               csr:        Scatterer impedance contrast (0.05)
-%                               nC:         Number of cysts (0)
-%                               rC:         Vector of cyst radii (m), length
-%                                           equal to nC
-%                               cC:         Matrix of cyst center locations
-%                                           in [y,z] (m), length equal to nC
-%                               zC:         Vector of cyst impedance
-%                                           contrast, length equal to nC
+%           wall_name           - String of wall name
+%           offset              - Lateral offset from center (m)
 %
-%  James Long, 12/10/2018 (Code partially from Nick Bottenus)
+%  James Long, 12/10/2018
+
+if ~exist('offset','var'); offset=0; end
 
 dY = obj.grid_vars.dY;
 dZ = obj.grid_vars.dZ;
@@ -32,7 +25,9 @@ if size(cwall,2) > obj.grid_vars.nZ; error('Wall depth exceeds simulation depth.
 nY = obj.grid_vars.nY;
 nW = size(cwall,1);
 pad = round((nW-nY)/2);
-wall_select = pad+1:pad+nY;
+offset = round(offset/obj.grid_vars.dY);
+wall_select = (pad+1:pad+nY)+offset;
+
 
 cwall = cwall(wall_select,:); obj.field_maps.cmap(:,1:size(cwall,2)) = cwall;
 rhowall = rhowall(wall_select,:); obj.field_maps.rhomap(:,1:size(cwall,2)) = rhowall;
