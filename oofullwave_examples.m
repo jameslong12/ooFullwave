@@ -1,9 +1,10 @@
-%  ooFullwave, v1.2.0
+%  ooFullwave, v1.4.0
 %
 %  Examples using fwObj to setup and run Fullwave simulations for focused,
-%  plane wave, and diverging transmits on linear arrays.
+%  plane wave, and diverging transmits on linear arrays. Includes examples
+%  with abdominal walls and adding scatterers.
 %
-%  James Long 12/06/2018
+%  James Long 12/10/2018
 %  ***Fullwave written by Gianmarco Pinton***
 
 %% Setup fwObj for varying transmit cases %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,7 +61,7 @@ subplot(236)
 scatter(sim.xdc.on_elements,sim.xdc.delays*1e6,msz,'.b'); axis tight
 xlabel('Element number'); ylabel('Time (us)'); title('Diverging delays')
 
-%% Make changes to maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Setup fwObj to make changes to maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 close; figure('pos',[2000 100 1400 500],'color','w')
 cax = [1440 1640];
@@ -99,7 +100,7 @@ imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,sim.field_maps.cmap',c
 xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
 title('Add speckle with cysts')
 
-%% Run simulation
+%% Run simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % t = tic;
