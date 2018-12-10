@@ -4,21 +4,21 @@ function obj = make_speckle(obj, varargin)
 %  keywords-style.
 %
 %  Calling:
-%           obj.make_speckle()
+%           obj.make_speckle('nscat',15,'csr',0.05,'nC',0)
 %
 %  Parameters:
 %           sc_params       - Structure of scatterer parameters
 %                               nscat:      Scatterers per resolution cell (15)
 %                               csr:        Scatterer impedance contrast (0.05)
 %                               nC:         Number of cysts (0)
-%                               rC:         Vector of cyst radii, length
+%                               rC:         Vector of cyst radii (m), length
 %                                           equal to nC
 %                               cC:         Matrix of cyst center locations
-%                                           in [y,z], length equal to nC
+%                                           in [y,z] (m), length equal to nC
 %                               zC:         Vector of cyst impedance
 %                                           contrast, length equal to nC
 %
-%  Code inherited from Nick Bottenus, function compiled by James Long, 03/10/2018
+%  James Long, 12/10/2018 (Code partially from Nick Bottenus)
 
 %%% Use inputParser to set optional parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 p = inputParser;
