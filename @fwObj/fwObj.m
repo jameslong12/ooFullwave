@@ -134,6 +134,7 @@ classdef fwObj < handle
         obj = add_wall(obj, wall_name, offset);
         show_map(obj, map_name);
         rf = do_sim(obj, field_flag);
+        acq_params = make_acq_params(obj);
         
     end
     
