@@ -1,9 +1,10 @@
-%  ooFullwave, v1.2.0
+%  ooFullwave, v1.4.0
 %
 %  Examples using fwObj to setup and run Fullwave simulations for focused,
-%  plane wave, and diverging transmits on linear arrays.
+%  plane wave, and diverging transmits on linear arrays. Includes examples
+%  with abdominal walls and adding scatterers.
 %
-%  James Long 12/06/2018
+%  James Long 12/10/2018
 %  ***Fullwave written by Gianmarco Pinton***
 
 %% Setup fwObj for varying transmit cases %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,40 +61,46 @@ subplot(236)
 scatter(sim.xdc.on_elements,sim.xdc.delays*1e6,msz,'.b'); axis tight
 xlabel('Element number'); ylabel('Time (us)'); title('Diverging delays')
 
-%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
+%% Setup fwObj to make changes to maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear
+close; figure('pos',[2000 100 1400 500],'color','w')
+cax = [1440 1640];
 
-% 4 mm radius, 60 mm deep
-cC1 = 1e-3*[-15 60; -5 60; 5 60; 15 60];    % Locations of cyst centers in [y z] (m)
-rC1 = 0.004*ones(size(cC1,1),1);            % Radii of cysts (m)
-zC1 = [0 0.025 0.075 0.1]';                 % Cyst relative impedance contrast
+%%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+c0 = 1540;                                  % Homogeneous speed of sound
+f0 = 2e6;                                   % Transmit center frequency (Hz)
+wZ = 8e-2;                                  % Axial extent (m)
+wY = 6e-2;                                  % Lateral extent (m)
+td =(wZ+1e-2)/c0;                           % Time duration of simulation (s)
+sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td);
 
-% 3 mm radius, 50 mm deep
-cC2 = 1e-3*[-15 50; -5 50; 5 50; 15 50];
-rC2 = 0.003*ones(size(cC2,1),1);
-zC2 = [0 0.025 0.075 0.1]';
-
-% 2 mm radius, 40 mm deep
-cC3 = 1e-3*[-15 40; -5 40; 5 40; 15 40];
-rC3 = 0.002*ones(size(cC3,1),1);
-zC3 = [0 0.025 0.075 0.1]';
-
-% 1 mm radius, 30 mm deep
-cC4 = 1e-3*[-15 30; -5 30; 5 30; 15 30];
-rC4 = 0.001*ones(size(cC4,1),1);
-zC4 = [0 0.025 0.075 0.1]';
-
-cC = [cC1; cC2; cC3; cC4];                  % Concatenate cC, rC, and zC
-rC = [rC1; rC2; rC3; rC4];
-zC = [zC1; zC2; zC3; zC4];
-sim = sim.make_speckle('nscat',50,'csr',0.05,'nC',length(rC),'cC',cC,'rC',rC,'zC',zC);
-
-%%% Show icmat, delays, and tx_apod %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-close; figure('pos',[2000 50 700 700],'color','w')
-imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,abs(sim.field_maps.cmap-c0)');
+subplot(131)
+imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,sim.field_maps.cmap',cax);
 xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
-title('cmap')
+title('Initial')
 
-%% Run simulation
+%%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+wall_name = 'r75hi';                        % Mast abdominal wall name
+offset = 0.01;                              % Lateral offset from center (m)
+sim.add_wall(wall_name,offset);
+
+subplot(132)
+imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,sim.field_maps.cmap',cax);
+xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
+title('Add abdominal wall')
+
+%%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
+cC = 1e-3*[-15 50; -5 50; 5 50; 15 50];    % Locations of cyst centers in [y z] (m)
+rC = 0.004*ones(size(cC,1),1);             % Radii of cysts (m)
+zC = [0 0.025 0.075 0.1]';                 % Cyst relative impedance contrast
+sim.make_speckle('nscat',50,'csr',0.05,'nC',length(rC),'cC',cC,'rC',rC,'zC',zC);
+
+subplot(133)
+imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,sim.field_maps.cmap',cax);
+xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
+title('Add speckle with cysts')
+
+%% Run simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % t = tic;
