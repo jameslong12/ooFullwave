@@ -6,9 +6,9 @@
 %  James Long 12/06/2018
 %  ***Fullwave written by Gianmarco Pinton***
 
-%% Focused transmit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Setup fwObj for varying transmit cases %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
-close; figure('pos',[2000 100 1000 700],'color','w')
+close; figure('pos',[2000 100 1200 600],'color','w')
 msz = 100;
 
 %%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,18 +60,7 @@ subplot(236)
 scatter(sim.xdc.on_elements,sim.xdc.delays*1e6,msz,'.b'); axis tight
 xlabel('Element number'); ylabel('Time (us)'); title('Diverging delays')
 
-%%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% t = tic;
-% rf_data = double(sim.do_sim());
-% fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
-
-%%% Collect full pressure field data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% t = tic;
-% p = double(sim.do_sim(1));
-% fprintf('   Field pressure data generated in %1.2f seconds \n',toc(t))
-
-%%
-%%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
+%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
 
 % 4 mm radius, 60 mm deep
 cC1 = 1e-3*[-15 60; -5 60; 5 60; 15 60];    % Locations of cyst centers in [y z] (m)
@@ -99,24 +88,19 @@ zC = [zC1; zC2; zC3; zC4];
 sim = sim.make_speckle('nscat',50,'csr',0.05,'nC',length(rC),'cC',cC,'rC',rC,'zC',zC);
 
 %%% Show icmat, delays, and tx_apod %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-close; figure('pos',[2000 50 1500 500],'color','w')
-subplot(131)
-imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.t_axis*1e6,sim.xdc.icmat(1:sim.grid_vars.nY,:)');
-xlabel('Lateral (mm)'); ylabel('Time (us)');
-title('sim.xdc.icmat (single row)')
-
-subplot(132)
+close; figure('pos',[2000 50 700 700],'color','w')
 imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,abs(sim.field_maps.cmap-c0)');
-xlabel('Lateral (mm)'); ylabel('Axial (mm)');
-title('sim.field\_maps.cmap')
+xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
+title('cmap')
 
-subplot(233)
-msz = 100;
-scatter(sim.xdc.on_elements,sim.xdc.delays*1e6,msz,'.b'); axis tight
-ylabel('Time (us)');
-title('sim.xdc.delays')
+%% Run simulation
 
-subplot(236)
-plot(sim.xdc.on_elements,sim.xdc.tx_apod,'-r','linewidth',2); axis tight
-xlabel('Element number'); ylabel('Element weight');
-title('sim.xdc.tx\_apod')
+%%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% t = tic;
+% rf_data = double(sim.do_sim());
+% fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
+
+%%% Collect full pressure field data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% t = tic;
+% p = double(sim.do_sim(1));
+% fprintf('   Field pressure data generated in %1.2f seconds \n',toc(t))
