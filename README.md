@@ -65,6 +65,8 @@ focus = [0 -0.03];                          % Negative focus for diverging in [y
 sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
 ```
 `focus_linear()` is called to calculate focal delays in transmit and set up the initial condition matrix (`icmat`). Plane wave transmit is achieved with a large focal distance relative to the field extent; diverging wave transmit is achieved with a negative focal depth.
+The corresponding `icmat` and element-wise focal delays can be seen here:
+![alt text](transmit.png)
 
 ```
 %%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
