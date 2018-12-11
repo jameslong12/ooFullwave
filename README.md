@@ -20,13 +20,49 @@ This repository contains an object-oriented wrapper for [Fullwave](https://gitla
 * [get_delays.m](get_delays.m) - Retrieve element-by-element delays in transmit
 
 ### Workflow
-	* Call `fwObj()` to initialize the simulation object-oriented
-	* Set transducer properties and call `make_xdc()`
-	* Define the focus and call `focus_linear()`
-	* If desired, change the field maps via `add_wall()` or `make_speckle()`
-	* Run the simulation with `do_sim()`
+* Call `fwObj()` to initialize the simulation object-oriented
+* Set transducer properties and call `make_xdc()`
+* Define the focus and call `focus_linear()`
+* If desired, change the field maps via `add_wall()` or `make_speckle()`
+* Run the simulation with `do_sim()`
 
 ### Example script walkthrough
 * [oofullwave_examples.m](oofullwave_examples.m) - Example usage with varying focal configurations and simple field map changes
-* More to be added in future versions
+
+```
+%%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+c0 = 1540;                                  % Homogeneous speed of sound
+f0 = 2e6;                                   % Transmit center frequency (Hz)
+wZ = 8e-2;                                  % Axial extent (m)
+wY = 6e-2;                                  % Lateral extent (m)
+td =(wZ+1e-2)/c0;                           % Time duration of simulation (s)
+sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td);
+```
+First, we will call `fwObj()` to initialize the simulation object. In this example, we have specified the homogeneous speed of sound, transmit center frequency, axial and lateral extents of the field, and the time duration of simulation.
+
+```
+%%% Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sim.xdc.type = 'linear';                    % Curvilinear or linear
+sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
+sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
+sim.xdc.n = 64;                             % Number of elements
+sim.make_xdc();                             % Call make_xdc to set up transducer
+```
+Next, we will set transducer properties and call `make_xdc()` to configure the remaining properties. The transducer type, pitch, kerf, and number of elements is required.
+
+```
+%%% Focused transmit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+focus = [0 0.03];                           % Focal point in [y z] (m)
+sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
+
+%%% Plane transmit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+th = 15;                                    % Angle for plane wave transmit (degrees)
+focus = 10*[sind(th) cosd(th)];             % Very far focus to flatten delays
+sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
+
+%%% Diverging transmit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+focus = [0 -0.03];                          % Negative focus for diverging in [y z] (m)
+sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
+```
+`focus_linear()` is called to calculate focal delays in transmit and set up the initial condition matrix (`icmat`). Plane wave transmit is achieved with a large focal distance relative to the field extent; diverging wave transmit is achieved with a negative focal depth.
 
