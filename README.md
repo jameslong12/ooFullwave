@@ -66,3 +66,21 @@ sim.focus_linear(focus);                    % Call focus_linear to calculate icm
 ```
 `focus_linear()` is called to calculate focal delays in transmit and set up the initial condition matrix (`icmat`). Plane wave transmit is achieved with a large focal distance relative to the field extent; diverging wave transmit is achieved with a negative focal depth.
 
+```
+%%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+wall_name = 'r75hi';                        % Mast abdominal wall name
+offset = 0.01;                              % Lateral offset from center (m)
+sim.add_wall(wall_name,offset);
+```
+A Mast abdominal wall can be added in the nearfield using `add_wall()`. Here, we add one with a lateral offset of 1 cm.
+
+```
+%%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
+cC = 1e-3*[-15 50; -5 50; 5 50; 15 50];    % Locations of cyst centers in [y z] (m)
+rC = 0.004*ones(size(cC,1),1);             % Radii of cysts (m)
+zC = [0 0.025 0.075 0.1]';                 % Cyst relative impedance contrast
+sim.make_speckle('nscat',50,'csr',0.05,'nC',length(rC),'cC',cC,'rC',rC,'zC',zC);
+```
+Scattering and cyst targets can be added by calling `make_speckle()`. The impedance mismatch, scattering density, and cyst size and location can be adjusted.
+
+
