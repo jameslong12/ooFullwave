@@ -83,6 +83,16 @@ rC = 0.004*ones(size(cC,1),1);             % Radii of cysts (m)
 zC = [0 0.025 0.075 0.1]';                 % Cyst relative impedance contrast
 sim.make_speckle('nscat',50,'csr',0.05,'nC',length(rC),'cC',cC,'rC',rC,'zC',zC);
 ```
-Scattering and cyst targets can be added by calling `make_speckle()`. The impedance mismatch, scattering density, and cyst size and location can be adjusted.
+Scattering and cyst targets can be added by calling `make_speckle()`. The impedance mismatch, scattering density, and cyst size and location can be adjusted. Combining the scatterers with the abdominal wall, we arrive at the following `cmap`:
+![alt text](maps.png)
+
+```
+%%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+t = tic;
+rf_data = double(sim.do_sim());
+fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
+```
+Finally, the simulation is run by calling `do_sim()`. Here, we collect single transmit channel data.
+
 
 
