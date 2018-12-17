@@ -1,6 +1,8 @@
 function obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
 
-%  Function to add scatterers to maps
+%  Method to add scatterers to maps from phantom files in format used in
+%  Field II. Adds scatterers using impedance flow method. Written for use
+%  with Mark Palmeri's ultratrack tools.
 %
 %  Calling:
 %           obj.add_fii_phantom('phtm_file.mat', 1.5-3, 0.05, 2)
@@ -8,8 +10,8 @@ function obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
 %  Parameters:
 %           phtm_file:      Path to phantom file. File must be .mat
 %                           containing "phantom" structure with fields
-%                           "position" and "amplitude" (output from Mark
-%                           Palmeri's ultratrack tools)
+%                           "position" and "amplitude" (standard output
+%                           from Mark Palmeri's ultratrack tools)
 %           el_lim:         Elevational limit [m] (default: 1.5e-3)
 %           csr:            Standard deviation of scatterer impedance
 %                           contrast (default: 0.05)
