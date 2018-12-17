@@ -23,8 +23,18 @@ if nargin < 4; symmetry = 1; end
 if nargin < 3; csr = 0.05; end
 if nargin < 2; el_lim = 1.5e3; warning('Using default elevation limit. Check for adequate scatterer density.'); end
 
-%%% Restrict positions in elevation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ind = abs(phantom.position(:,2)) < el_lim;
+%%% Restrict positions in all dimensions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ind = abs(phantom.position(:,2)) < el_lim; % elevation
+py = phantom.position(:,1); py = py(ind);
+pz = phantom.position(:,3); pz = pz(ind);
+amp = phantom.amplitude; amp = amp(ind);
+
+ind = abs(phantom.position(:,1)) < obj.input_vars.wY; % lateral
+py = phantom.position(:,1); py = py(ind);
+pz = phantom.position(:,3); pz = pz(ind);
+amp = phantom.amplitude; amp = amp(ind);
+
+ind = phantom.position(:,3) < obj.input_vars.wZ; % axial
 py = phantom.position(:,1); py = py(ind);
 pz = phantom.position(:,3); pz = pz(ind);
 amp = phantom.amplitude; amp = amp(ind);
