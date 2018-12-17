@@ -1,7 +1,6 @@
 function obj = make_speckle(obj, varargin)
 
-%  Function to create transducer related fields. Call parameters
-%  keywords-style.
+%  Function to add scatterers and optional cyst(s) to map
 %
 %  Calling:
 %           obj.make_speckle('nscat',15,'csr',0.05,'nC',0)
@@ -18,7 +17,7 @@ function obj = make_speckle(obj, varargin)
 %                               zC:         Vector of cyst impedance
 %                                           contrast, length equal to nC
 %
-%  James Long, 12/10/2018 (Code partially from Nick Bottenus)
+%  James Long, 12/17/2018 (Code partially from Nick Bottenus)
 
 %%% Use inputParser to set optional parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 p = inputParser;
