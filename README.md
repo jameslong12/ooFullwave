@@ -25,7 +25,7 @@ This repository contains an object-oriented wrapper for [Fullwave](https://gitla
 * Call `fwObj()` to initialize the simulation object-oriented
 * Set transducer properties and call `make_xdc()`
 * Define the focus and call `focus_linear()`
-* If desired, change the field maps via `add_wall()` or `make_speckle()`
+* If desired, change the field maps via `add_wall()`, `make_speckle()`, `make_points()`, or `add_fii_phantom()`
 * Run the simulation with `do_sim()`
 
 ### Example script walkthrough
