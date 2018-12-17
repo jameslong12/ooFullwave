@@ -133,6 +133,7 @@ classdef fwObj < handle
         obj = make_speckle(obj, varargin);
         obj = make_points(obj, varargin)
         obj = add_wall(obj, wall_name, offset);
+        obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
         show_map(obj, map_name);
         rf = do_sim(obj, field_flag);
         acq_params = make_acq_params(obj);
