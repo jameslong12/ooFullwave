@@ -3,9 +3,15 @@ function obj = make_points(obj, varargin)
 %  Function to add point targets to map
 %
 %  Calling:
-%           obj.make_points('pos',15,'zd',0.05)
+%           obj.make_points('pos',[0.01 0.02],'zd',0.5,'method','adapt')
 %
 %  Optional parameters:
+%           pos:        Positions of point targets in [y z], each row
+%                       designating a new point
+%           zd:         Target impedance as fraction
+%           method:     Method to calculate impedance. 'fixed' to use
+%                       obj.input_vars.c0, 'adapt' to use index at
+%                       obj.field_maps.cmap.
 %
 %  James Long, 12/17/2018
 
