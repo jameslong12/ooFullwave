@@ -13,3 +13,17 @@ function obj = make_points(obj, varargin)
 p = inputParser;
 addOptional(p,'pos',[0 obj.input_vars.wZ/2])    % Laterally centered, half depth
 addOptional(p,'zd',0.5)                         % 50% impedance
+
+p.parse(varargin{:})
+var_struct = p.Results;
+assignments = extract_struct(var_struct);
+for i = 1:length(assignments)
+    eval(assignments{i})
+end
+
+%%% Place points in map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for idx = 1:size(pos,2)
+    [~,iy] = min(abs(obj.grid_vars.y_axis-pos(idx,1)));
+    [~,iz] = min(abs(obj.grid_vars.z_axis-pos(idx,2)));
+end
+
