@@ -1,4 +1,4 @@
-function obj = add_fii_phantom(obj, phtm_file, el_lim, csr, symmetry)
+function obj = add_fii_phantom(obj, phtm_file, el_lim, csr, symmetry, fnum)
 
 %  Function to add scatterers to maps
 %
@@ -28,6 +28,15 @@ ind = abs(phantom.position(:,2)) < el_lim;
 py = phantom.position(:,1); py = py(ind);
 pz = phantom.position(:,3); pz = pz(ind);
 amp = phantom.amplitude; amp = amp(ind);
+
+%%% If F-number known, calculate scatterers per resolution cell %%%%%%%%%%%
+scat_density = length(py)/(abs(max(py)*max(pz)));
+ry = obj.input_vars.lambda*fnum; rz = obj.input_vars.ncycles*obj.input_vars.lambda/2;
+rescell = ry*rz; nscat_cell = scat_density*rescell;
+fprintf('   Scatterers per resolution cell = %1.1f',nscat_cell)
+
+%%% Optional code to visualize %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%scatter(py,pz,0.5,'.r'); axis image; title(sprintf('n_{scat per cell} = %1.1f',nscat_cell))
 
 %%% If symmetrical, duplicate phantom %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if symmetry
