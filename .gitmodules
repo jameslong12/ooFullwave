@@ -1,3 +1,6 @@
 [submodule "Beamforming"]
 	path = Beamforming
 	url = git@gitlab.oit.duke.edu:nbb5/Beamforming.git
+[submodule "fullwave2D"]
+	path = fullwave2D
+	url = git@gitlab.oit.duke.edu:ultrasound/fullwave2D.git
