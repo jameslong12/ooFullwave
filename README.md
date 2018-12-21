@@ -96,5 +96,8 @@ fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
 ```
 Finally, the simulation is run by calling `do_sim()`. Here, we collect single transmit channel data.
 
-
+### References
+* Fullwave: [Pinton, G. F., Dahl, J., Rosenzweig, S., & Trahey, G. E. (2009). A heterogeneous nonlinear attenuating full-wave model of ultrasound. IEEE transactions on ultrasonics, ferroelectrics, and frequency control, 56(3).](https://ieeexplore.ieee.org/abstract/document/4816057)
+* Impedance flow for Fullwave: [Pinton, G. F. (2017). Subresolution Displacements in Finite Difference Simulations of Ultrasound Propagation and Imaging. IEEE transactions on ultrasonics, ferroelectrics, and frequency control, 64(3), 537-543.](https://ieeexplore.ieee.org/abstract/document/7781628)
+* Abdominal wall models: [Mast, T. D., Hinkelman, L. M., Orr, M. J., Sparrow, V. W., & Waag, R. C. (1997). Simulation of ultrasonic pulse propagation through the abdominal wall. The Journal of the Acoustical Society of America, 102(2), 1177-1190.](https://asa.scitation.org/doi/abs/10.1121/1.421015)
 
