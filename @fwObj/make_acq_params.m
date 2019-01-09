@@ -29,5 +29,5 @@ acq_params.focus=[obj.xdc.focus(1) 0 obj.xdc.focus(2)];
 ind1=find(obj.xdc.delays==0,1,'first');
 foc_pm=sign(obj.xdc.focus(2));
 acq_params.t0_var=foc_pm*(sqrt(sum((acq_params.focus-acq_params.rx_pos(ind1,:)).^2))-...
-    sqrt(sum((acq_params.focus).^2)))/sim.input_vars.c0/sim.grid_vars.dT;
+    sqrt(sum((acq_params.focus).^2)))/obj.input_vars.c0/obj.grid_vars.dT;
 end
