@@ -11,4 +11,4 @@ date
 hostname
 
 module load Matlab/R2017b
-matlab -nojvm -nodisplay -nosplash -r "cd('/datacommons/ultrasound/jc500/GIT/ooFullwave/');tic;benchmark_test_v1;toc;exit;"
+matlab -nojvm -nodisplay -nosplash -r "cd('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/');tic;benchmark_test_v1;toc;exit;"
