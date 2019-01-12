@@ -54,8 +54,8 @@ x_focus = x_focus-mean(x_focus);            % Set mean to zero
 for i = 1:n_lines
     sim.xdc.on_elements = (1:n_on)+i-1;     % Specify on elements
     sim.make_xdc();                         % Call make_xdc to set up transducer
-    focus = [x_focus(i) z_focus];           % Specify focal point (m)
-    sim.focus_linear(focus);                % Call focus_linear to calculate icmat
+    sim.xdc.focus = [x_focus(i) z_focus];   % Specify focal point (m)
+    sim.focus_linear(sim.xdc.focus);        % Call focus_linear to calculate icmat
     
     t = tic;
     rf_data(:,:,i) = single(sim.do_sim());  % Perform simulation
