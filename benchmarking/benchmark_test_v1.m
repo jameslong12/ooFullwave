@@ -62,6 +62,7 @@ for i = 1:n_lines
     rf_data = single(sim.do_sim());         % Perform simulation
     acq_params = sim.make_acq_params();     % Output acquisition parameters
     acq_params.tx_pos = [x_focus(i) 0 0];   % Correct transmit position
+    rf_unfocused(:,:,i) = rf_data;          % Store unfocused data
     
     bf_params.channel = 1; bf_params.z = ((1:acq_params.samples)+0*acq_params.t0)*acq_params.c/2/acq_params.fs;
     acq_params.receive_fixed = 1; %acq_params.t0 = acq_params.t0/2;
@@ -72,12 +73,12 @@ for i = 1:n_lines
     % Store apodization, RF, and parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     rf(:,:,i) = rf_focused(:,sim.xdc.on_elements);
     params(i) = acq_params;
-    
+    times = toc(t);
     fprintf('   Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t))
     journal{i} = sprintf('Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t));
 end
 
 %%% Save data and remove temporary path %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw1.mat','rf','params','sim','-v7.3')
+save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw1.mat','rf','rf_unfocused','params','sim','journal''times','-v7.3')
 rmdir(tmp_path,'s');
 cd(cwd)
