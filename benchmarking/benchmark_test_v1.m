@@ -6,6 +6,7 @@ cwd = pwd;
 
 %%% Add paths %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 addpath(genpath('/datacommons/ultrasound/jc500/GIT/ooFullwave/'))
+addpath(genpath('/datacommons/ultrasound/jc500/GIT/Beamforming/'))
 fullwave_path = '/datacommons/ultrasound/jc500/GIT/Fullwave/';
 
 scratch_path = '/work/jc500/scratch/';
