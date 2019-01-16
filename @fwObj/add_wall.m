@@ -15,9 +15,7 @@ if ~exist('offset','var'); offset=0; end
 
 dY = obj.grid_vars.dY;
 dZ = obj.grid_vars.dZ;
-c0 = obj.input_vars.c0;
-rho = obj.input_vars.rho;
-[cwall, rhowall, attenwall, Bwall] = img2fieldFlatten(wall_name,dY,dZ,c0,rho);
+[cwall, rhowall, attenwall, Bwall] = img2fieldFlatten(wall_name,dY,dZ);
 
 if size(cwall,1) < obj.grid_vars.nY; error('Simulation width exceeds wall width.'); end
 if size(cwall,2) > obj.grid_vars.nZ; error('Wall depth exceeds simulation depth.'); end
