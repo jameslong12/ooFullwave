@@ -125,7 +125,7 @@ classdef fwObj < handle
         obj = make_points(obj, varargin)
         obj = add_wall(obj, wall_name, offset);
         obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
-        rf = do_sim(obj, field_flag);
+        rf = do_sim(obj, field_flag, v);
         acq_params = make_acq_params(obj);
         
     end
