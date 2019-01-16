@@ -17,7 +17,7 @@ dY = obj.grid_vars.dY;
 dZ = obj.grid_vars.dZ;
 c0 = obj.input_vars.c0;
 rho = obj.input_vars.rho;
-[cwall, rhowall, awall, boverawall] = img2fieldFlatten(wall_name,dY,dZ,c0,rho);
+[cwall, rhowall, attenwall, betawall] = img2fieldFlatten(wall_name,dY,dZ,c0,rho);
 
 if size(cwall,1) < obj.grid_vars.nY; error('Simulation width exceeds wall width.'); end
 if size(cwall,2) > obj.grid_vars.nZ; error('Wall depth exceeds simulation depth.'); end
@@ -31,6 +31,6 @@ wall_select = (pad+1:pad+nY)+offset;
 if any(wall_select < 1) || any(wall_select > nW); error('Offset exceeds wall width.'); end
 cwall = cwall(wall_select,:); obj.field_maps.cmap(:,1:size(cwall,2)) = cwall;
 rhowall = rhowall(wall_select,:); obj.field_maps.rhomap(:,1:size(cwall,2)) = rhowall;
-awall = awall(wall_select,:); obj.field_maps.amap(:,1:size(cwall,2)) = awall;
-boverawall = boverawall(wall_select,:); obj.field_maps.boveramap(:,1:size(cwall,2)) = boverawall;
+attenwall = attenwall(wall_select,:); obj.field_maps.attenmap(:,1:size(cwall,2)) = attenwall;
+betawall = betawall(wall_select,:); obj.field_maps.betamap(:,1:size(cwall,2)) = betawall;
 end
