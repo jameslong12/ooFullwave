@@ -68,6 +68,9 @@ for i = 1:n_lines
     acq_params.receive_fixed = 1; %acq_params.t0 = acq_params.t0/2;
     acq_params.theta = 0;
     bf=dynamic_receive_linear(acq_params,bf_params);
+    
+    acq_params.samples
+    size(rf_data)
     [rf_focused,z,x(i)]=bf.beamform(rf_data);
     
     % Store apodization, RF, and parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
