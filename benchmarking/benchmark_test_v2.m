@@ -79,6 +79,6 @@ for i = 1:n_lines
 end
 
 %%% Save data and remove temporary path %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw1.mat','rf','rf_unfocused','params','sim','journal''times','-v7.3')
+save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw2.mat','rf','rf_unfocused','params','sim','journal''times','-v7.3')
 rmdir(tmp_path,'s');
 cd(cwd)
