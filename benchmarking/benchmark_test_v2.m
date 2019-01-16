@@ -62,6 +62,7 @@ for i = 1:n_lines
     rf_data = single(sim.do_sim(0,2));      % Perform simulation (version 2)
     acq_params = sim.make_acq_params();     % Output acquisition parameters
     acq_params.tx_pos = [x_focus(i) 0 0];   % Correct transmit position
+    acq_params.samples = size(rf_data,1);   % Update samples
     rf_unfocused(:,:,i) = rf_data;          % Store unfocused data
     
     bf_params.channel = 1; bf_params.z = ((1:acq_params.samples)+0*acq_params.t0)*acq_params.c/2/acq_params.fs;
