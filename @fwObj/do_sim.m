@@ -38,6 +38,7 @@ if v == 2
             obj.input_vars.cfl, obj.field_maps.cmap, obj.field_maps.rhomap,...
             obj.field_maps.attenmap, obj.field_maps.Bmap, obj.xdc.incoords,...
             obj.xdc.outcoords, obj.xdc.icmat);
+        !./fullwave2_try6_nln_attenuating
     else
         error('Fullwave2 is not supported on your operating system.')
     end
