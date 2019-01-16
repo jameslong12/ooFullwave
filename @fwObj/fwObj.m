@@ -19,14 +19,14 @@ classdef fwObj < handle
     %           wZ              - Depth of simulation in m (5e-2)
     %           rho             - Density in kg/m^3 (1000)
     %           atten           - Attenuation in dB/MHz/cm (0)
-    %           beta            - Non-linearity parameter (0)
+    %           B               - Non-linearity parameter (0)
     %
     %  Return:
     %           obj             - Simulation object with properties:
     %                               input_vars:     Input variables
     %                               grid_vars:      Grid variables
     %                               field_maps:     Field maps (cmap, rhomap,
-    %                                               attenmap, betamap)
+    %                                               attenmap, Bmap)
     %
     %  James Long, 01/16/2019
     
@@ -53,7 +53,7 @@ classdef fwObj < handle
             addOptional(p,'wZ',6e-2)
             addOptional(p,'rho',1000)
             addOptional(p,'atten',0)
-            addOptional(p,'beta',0)
+            addOptional(p,'B',0)
             addOptional(p,'f0',1e6)
             addOptional(p,'ncycles',2)
             
@@ -95,7 +95,7 @@ classdef fwObj < handle
                 'wZ',wZ,...
                 'rho',rho,...
                 'atten',atten,...
-                'beta',beta,...
+                'B',B,...
                 'f0',f0,...
                 'omega0',omega0,...
                 'lambda',lambda);
@@ -113,7 +113,7 @@ classdef fwObj < handle
             obj.field_maps = struct('cmap',cmap,...
                 'rhomap',rhomap,...
                 'attenmap',attenmap,...
-                'betamap',betamap);
+                'Bmap',Bmap);
             
         end
         
