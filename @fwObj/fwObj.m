@@ -19,7 +19,7 @@ classdef fwObj < handle
     %           wZ              - Depth of simulation in m (5e-2)
     %           rho             - Density in kg/m^3 (1000)
     %           atten           - Attenuation in dB/MHz/cm (0)
-    %           bovera          - Non-linearity parameter (-2)
+    %           beta            - Non-linearity parameter (0)
     %
     %  Return:
     %           obj             - Simulation object with properties:
@@ -62,7 +62,7 @@ classdef fwObj < handle
             addOptional(p,'wZ',6e-2)
             addOptional(p,'rho',1000)
             addOptional(p,'atten',0)
-            addOptional(p,'bovera',-2)
+            addOptional(p,'beta',0)
             addOptional(p,'f0',1e6)
             addOptional(p,'ncycles',2)
             
@@ -88,10 +88,10 @@ classdef fwObj < handle
             y_axis = 0:dY:(nY-1)*dY; y_axis = y_axis - mean(y_axis);
             
             %%% Generate field maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            cmap = ones(nY,nZ)*c0;   % speed of sound map (m/s)
-            rhomap = ones(nY,nZ)*rho; % density map (kg/m^3)
-            attenmap = ones(nY,nZ)*atten;    % attenuation map (dB/MHz/cm)
-            boveramap = ones(nY,nZ)*bovera;    % nonlinearity map
+            cmap = ones(nY,nZ)*c0;          % speed of sound map (m/s)
+            rhomap = ones(nY,nZ)*rho;       % density map (kg/m^3)
+            attenmap = ones(nY,nZ)*atten;   % attenuation map (dB/MHz/cm)
+            betamap = ones(nY,nZ)*beta;     % nonlinearity map
             
             %%% Package into structures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             obj.input_vars = struct('c0',c0,...
@@ -104,7 +104,7 @@ classdef fwObj < handle
                 'wZ',wZ,...
                 'rho',rho,...
                 'atten',atten,...
-                'bovera',bovera,...
+                'beta',beta,...
                 'f0',f0,...
                 'omega0',omega0,...
                 'lambda',lambda);
@@ -122,7 +122,7 @@ classdef fwObj < handle
             obj.field_maps = struct('cmap',cmap,...
                 'rhomap',rhomap,...
                 'attenmap',attenmap,...
-                'boveramap',boveramap);
+                'betamap',betamap);
             
         end
         
