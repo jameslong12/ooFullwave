@@ -74,9 +74,11 @@ if field_flag
     out = reshape(genout,size(genout,1),size(modidy,2),size(modidy,1));
 else
     for idx = 1:size(obj.xdc.outcoords)
-        genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = double(genout(:,idx));
+        genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
     end
     
+    obj.grid_vars.t_axis = obj.grid_vars.t_axis(1:size(genout_re,1)); % force same size
+
     %%% Average across output to reconstruct element traces %%%%%%%%%%%%%%%
     for idx = 1:obj.xdc.n
         out(:,idx) = mean(genout_re(:,obj.xdc.e_ind(idx,1):obj.xdc.e_ind(idx,2)),2);
