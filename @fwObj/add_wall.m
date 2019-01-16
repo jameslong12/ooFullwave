@@ -9,7 +9,7 @@ function obj = add_wall(obj, wall_name, offset)
 %           wall_name           - String of wall name
 %           offset              - Lateral offset from center (m)
 %
-%  James Long, 12/10/2018
+%  James Long, 01/16/2019
 
 if ~exist('offset','var'); offset=0; end
 
