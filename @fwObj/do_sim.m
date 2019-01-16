@@ -14,7 +14,7 @@ function out = do_sim(obj, field_flag, v)
 %  Returns:
 %           out                 - Simulation result data
 %
-%  James Long 01/11/2019
+%  James Long 01/16/2019
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
@@ -36,7 +36,7 @@ if v == 2
             obj.input_vars.omega0, obj.input_vars.wY, obj.input_vars.wZ,...
             obj.input_vars.td, obj.input_vars.p0, obj.input_vars.ppw,...
             obj.input_vars.cfl, obj.field_maps.cmap, obj.field_maps.rhomap,...
-            obj.field_maps.attenmap, obj.field_maps.betamap, obj.xdc.incoords,...
+            obj.field_maps.attenmap, obj.field_maps.Bmap, obj.xdc.incoords,...
             obj.xdc.outcoords, obj.xdc.icmat);
     else
         error('Fullwave2 is not supported on your operating system.')
