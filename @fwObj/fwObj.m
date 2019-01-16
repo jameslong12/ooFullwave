@@ -26,18 +26,9 @@ classdef fwObj < handle
     %                               input_vars:     Input variables
     %                               grid_vars:      Grid variables
     %                               field_maps:     Field maps (cmap, rhomap,
-    %                                               attenmap, boveramap)
+    %                                               attenmap, betamap)
     %
-    %  Methods:
-    %           make_xdc        - Generate transducer properties based on
-    %                             transducer type and focusing, returns xdc
-    %                             property of obj
-    %           gen_speckle     - Generate a field of scatters by changing
-    %                             cmap, with an option to add lesions
-    %           do_sim          - Perform the simulation and return the
-    %                             channel data
-    %
-    %  James Long, 03/09/2018
+    %  James Long, 01/16/2019
     
     properties
         input_vars
@@ -134,7 +125,6 @@ classdef fwObj < handle
         obj = make_points(obj, varargin)
         obj = add_wall(obj, wall_name, offset);
         obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
-        show_map(obj, map_name);
         rf = do_sim(obj, field_flag);
         acq_params = make_acq_params(obj);
         
