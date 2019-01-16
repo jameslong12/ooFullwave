@@ -82,7 +82,7 @@ classdef fwObj < handle
             cmap = ones(nY,nZ)*c0;          % speed of sound map (m/s)
             rhomap = ones(nY,nZ)*rho;       % density map (kg/m^3)
             attenmap = ones(nY,nZ)*atten;   % attenuation map (dB/MHz/cm)
-            betamap = ones(nY,nZ)*beta;     % nonlinearity map
+            Bmap = ones(nY,nZ)*B;           % nonlinearity map
             
             %%% Package into structures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             obj.input_vars = struct('c0',c0,...
