@@ -60,6 +60,10 @@ for i = 1:n_lines
     
     t = tic;
     rf_data = single(sim.do_sim(0,2));      % Perform simulation (version 2)
+    fprintf('   Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t))
+    times(i) = toc(t);
+    
+    t = tic;
     acq_params = sim.make_acq_params();     % Output acquisition parameters
     acq_params.tx_pos = [x_focus(i) 0 0];   % Correct transmit position
     acq_params.samples = size(rf_data,1);   % Update samples
@@ -69,20 +73,17 @@ for i = 1:n_lines
     acq_params.receive_fixed = 1; %acq_params.t0 = acq_params.t0/2;
     acq_params.theta = 0;
     bf=dynamic_receive_linear(acq_params,bf_params);
-    
-    acq_params.samples
-    size(rf_data)
     [rf_focused,z,x(i)]=bf.beamform(rf_data);
+    fprintf('   Beamformed line %d of %d in %1.2f seconds \n',i,n_lines,toc(t))
     
     % Store apodization, RF, and parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     rf(:,:,i) = rf_focused(:,sim.xdc.on_elements);
     params(i) = acq_params;
-    times = toc(t);
-    fprintf('   Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t))
+    
     journal{i} = sprintf('Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t));
 end
 
 %%% Save data and remove temporary path %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw2.mat','rf','rf_unfocused','params','sim','journal''times','-v7.3')
+save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw2.mat','rf','rf_unfocused','params','sim','journal','times','-v7.3')
 rmdir(tmp_path,'s');
 cd(cwd)

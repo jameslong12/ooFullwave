@@ -73,12 +73,12 @@ for i = 1:n_lines
     % Store apodization, RF, and parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     rf(:,:,i) = rf_focused(:,sim.xdc.on_elements);
     params(i) = acq_params;
-    times = toc(t);
+    times(i) = toc(t);
     fprintf('   Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t))
     journal{i} = sprintf('Channel data for line %d of %d generated in %1.2f seconds \n',i,n_lines,toc(t));
 end
 
 %%% Save data and remove temporary path %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw1.mat','rf','rf_unfocused','params','sim','journal''times','-v7.3')
+save('/datacommons/ultrasound/jc500/GIT/ooFullwave/benchmarking/fw1.mat','rf','rf_unfocused','params','sim','journal','times','-v7.3')
 rmdir(tmp_path,'s');
 cd(cwd)
