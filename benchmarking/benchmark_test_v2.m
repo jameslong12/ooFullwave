@@ -22,7 +22,8 @@ f0 = 1e6;                                   % Transmit center frequency (Hz)
 wZ = 5e-2;                                  % Axial extent (m)
 wY = 3e-2;                                  % Lateral extent (m)
 td =(wZ+1e-2)/c0;                           % Time duration of simulation (s)
-sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td);
+ppw = 8;                                    % Points per wavelength
+sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td,'ppw',ppw);
 
 %%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 wall_name = 'r75hi';                        % Mast abdominal wall name
