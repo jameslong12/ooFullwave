@@ -14,7 +14,7 @@ classdef fwObj < handle
     %           td              - Time duration of simulation in s (40e-6)
     %           p0              - Pressure amplitude of transmit in Pa (1e5)
     %           ppw             - Spatial points per wavelength (8)
-    %           cfl             - Courant-Friedrichs-Levi number (0.5)
+    %           cfl             - Courant-Friedrichs-Levi number (0.4)
     %           wY              - Lateral span of simulation in m (5e-2)
     %           wZ              - Depth of simulation in m (5e-2)
     %           rho             - Density in kg/m^3 (1000)
@@ -48,7 +48,7 @@ classdef fwObj < handle
             addOptional(p,'td',100e-6)
             addOptional(p,'p0',1e5)
             addOptional(p,'ppw',8)
-            addOptional(p,'cfl',0.5)
+            addOptional(p,'cfl',0.4)
             addOptional(p,'wY',10e-2)
             addOptional(p,'wZ',6e-2)
             addOptional(p,'rho',1000)
@@ -123,7 +123,7 @@ classdef fwObj < handle
         delays = get_delays(focus,rx_pos,c);
         obj = make_speckle(obj, varargin);
         obj = make_points(obj, varargin)
-        obj = add_wall(obj, wall_name, offset);
+        obj = add_wall(obj, wall_name, offset, filt_size);
         obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
         rf = do_sim(obj, field_flag, v);
         acq_params = make_acq_params(obj);
