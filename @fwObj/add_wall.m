@@ -29,18 +29,20 @@ offset = round(offset/obj.grid_vars.dY);
 wall_select = (pad+1:pad+nY)+offset;
 
 if any(wall_select < 1) || any(wall_select > nW); error('Offset exceeds wall width.'); end
-cwall = cwall(wall_select,:); 
-rhowall = rhowall(wall_select,:); 
-attenwall = attenwall(wall_select,:); 
-Bwall = Bwall(wall_select,:); 
+cwall = cwall(wall_select,:);
+rhowall = rhowall(wall_select,:);
+attenwall = attenwall(wall_select,:);
+Bwall = Bwall(wall_select,:);
 
 % Apply Gaussian blur %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if ~exist('filt_size','var'); filt_size = 12; end
-cwall = imgaussfilt(cwall,obj.input_vars.ppw/filt_size);
-rhowall = imgaussfilt(rhowall,obj.input_vars.ppw/filt_size);
-attenwall = imgaussfilt(attenwall,obj.input_vars.ppw/filt_size);
-Bwall = imgaussfilt(Bwall,obj.input_vars.ppw/filt_size);
+if filt_size ~= 0
+    cwall = imgaussfilt(cwall,obj.input_vars.ppw/filt_size);
+    rhowall = imgaussfilt(rhowall,obj.input_vars.ppw/filt_size);
+    attenwall = imgaussfilt(attenwall,obj.input_vars.ppw/filt_size);
+    Bwall = imgaussfilt(Bwall,obj.input_vars.ppw/filt_size);
+end
 
 % Add to field_maps structure %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.field_maps.cmap(:,1:size(cwall,2)) = cwall;
