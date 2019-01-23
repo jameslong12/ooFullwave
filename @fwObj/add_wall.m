@@ -1,4 +1,4 @@
-function obj = add_wall(obj, wall_name, offset)
+function obj = add_wall(obj, wall_name, offset, filt_size)
 
 %  Function to add abdominal wall.
 %
@@ -8,6 +8,7 @@ function obj = add_wall(obj, wall_name, offset)
 %  Parameters:
 %           wall_name           - String of wall name
 %           offset              - Lateral offset from center (m)
+%           filt_size           - Factor for Gaussian blurring (default: 12)
 %
 %  James Long, 01/16/2019
 
@@ -34,10 +35,12 @@ attenwall = attenwall(wall_select,:);
 Bwall = Bwall(wall_select,:); 
 
 % Apply Gaussian blur %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cwall = imgaussfilt(cwall,obj.input_vars.ppw/12);
-rhowall = imgaussfilt(rhowall,obj.input_vars.ppw/12);
-attenwall = imgaussfilt(attenwall,obj.input_vars.ppw/12);
-Bwall = imgaussfilt(Bwall,obj.input_vars.ppw/12);
+
+if ~exist('filt_size','var'); filt_size = 12; end
+cwall = imgaussfilt(cwall,obj.input_vars.ppw/filt_size);
+rhowall = imgaussfilt(rhowall,obj.input_vars.ppw/filt_size);
+attenwall = imgaussfilt(attenwall,obj.input_vars.ppw/filt_size);
+Bwall = imgaussfilt(Bwall,obj.input_vars.ppw/filt_size);
 
 % Add to field_maps structure %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.field_maps.cmap(:,1:size(cwall,2)) = cwall;
