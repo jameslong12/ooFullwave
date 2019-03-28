@@ -13,31 +13,22 @@ classdef fwObj < handle
     %           c0              - Speed of sound in m/s (1540)
     %           td              - Time duration of simulation in s (40e-6)
     %           p0              - Pressure amplitude of transmit in Pa (1e5)
-    %           ppw             - Spatial points per wavelength (15)
+    %           ppw             - Spatial points per wavelength (8)
     %           cfl             - Courant-Friedrichs-Levi number (0.4)
     %           wY              - Lateral span of simulation in m (5e-2)
     %           wZ              - Depth of simulation in m (5e-2)
     %           rho             - Density in kg/m^3 (1000)
     %           atten           - Attenuation in dB/MHz/cm (0)
-    %           bovera          - Non-linearity parameter (-2)
+    %           B               - Non-linearity parameter (0)
     %
     %  Return:
     %           obj             - Simulation object with properties:
     %                               input_vars:     Input variables
     %                               grid_vars:      Grid variables
     %                               field_maps:     Field maps (cmap, rhomap,
-    %                                               attenmap, boveramap)
+    %                                               attenmap, Bmap)
     %
-    %  Methods:
-    %           make_xdc        - Generate transducer properties based on
-    %                             transducer type and focusing, returns xdc
-    %                             property of obj
-    %           gen_speckle     - Generate a field of scatters by changing
-    %                             cmap, with an option to add lesions
-    %           do_sim          - Perform the simulation and return the
-    %                             channel data
-    %
-    %  James Long, 03/09/2018
+    %  James Long, 01/16/2019
     
     properties
         input_vars
@@ -56,13 +47,13 @@ classdef fwObj < handle
             addOptional(p,'c0',1540)
             addOptional(p,'td',100e-6)
             addOptional(p,'p0',1e5)
-            addOptional(p,'ppw',15)
+            addOptional(p,'ppw',8)
             addOptional(p,'cfl',0.4)
             addOptional(p,'wY',10e-2)
             addOptional(p,'wZ',6e-2)
             addOptional(p,'rho',1000)
             addOptional(p,'atten',0)
-            addOptional(p,'bovera',-2)
+            addOptional(p,'B',0)
             addOptional(p,'f0',1e6)
             addOptional(p,'ncycles',2)
             
@@ -88,10 +79,10 @@ classdef fwObj < handle
             y_axis = 0:dY:(nY-1)*dY; y_axis = y_axis - mean(y_axis);
             
             %%% Generate field maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            cmap = ones(nY,nZ)*c0;   % speed of sound map (m/s)
-            rhomap = ones(nY,nZ)*rho; % density map (kg/m^3)
-            attenmap = ones(nY,nZ)*atten;    % attenuation map (dB/MHz/cm)
-            boveramap = ones(nY,nZ)*bovera;    % nonlinearity map
+            cmap = ones(nY,nZ)*c0;          % speed of sound map (m/s)
+            rhomap = ones(nY,nZ)*rho;       % density map (kg/m^3)
+            attenmap = ones(nY,nZ)*atten;   % attenuation map (dB/MHz/cm)
+            Bmap = ones(nY,nZ)*B;           % nonlinearity map
             
             %%% Package into structures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             obj.input_vars = struct('c0',c0,...
@@ -104,7 +95,7 @@ classdef fwObj < handle
                 'wZ',wZ,...
                 'rho',rho,...
                 'atten',atten,...
-                'bovera',bovera,...
+                'B',B,...
                 'f0',f0,...
                 'omega0',omega0,...
                 'lambda',lambda);
@@ -122,7 +113,7 @@ classdef fwObj < handle
             obj.field_maps = struct('cmap',cmap,...
                 'rhomap',rhomap,...
                 'attenmap',attenmap,...
-                'boveramap',boveramap);
+                'Bmap',Bmap);
             
         end
         
@@ -132,10 +123,9 @@ classdef fwObj < handle
         delays = get_delays(focus,rx_pos,c);
         obj = make_speckle(obj, varargin);
         obj = make_points(obj, varargin)
-        obj = add_wall(obj, wall_name, offset);
+        obj = add_wall(obj, wall_name, offset, filt_size);
         obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
-        show_map(obj, map_name);
-        rf = do_sim(obj, field_flag);
+        rf = do_sim(obj, field_flag, v);
         acq_params = make_acq_params(obj);
         
     end

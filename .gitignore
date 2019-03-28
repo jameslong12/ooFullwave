@@ -4,3 +4,5 @@ demo*
 slurm*
 Beamforming
 fullwave2D
+*.mat
+*.png
