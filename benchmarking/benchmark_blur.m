@@ -14,14 +14,14 @@ frequencies = 1.4:0.4:5.0;
 c0 = 1540;                                  % Homogeneous speed of sound
 f0 = frequencies(idx)*1e6;                  % Transmit center frequency (Hz)
 wZ = 8e-2;                                  % Axial extent (m)
-wY = 6e-2;                                  % Lateral extent (m)
+wY = 5.5e-2;                                % Lateral extent (m)
 td = (2*wZ+1e-2)/c0;                        % Time duration of simulation (s)
 ppw = 8;                                    % Points per wavelength
 sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td,'ppw',ppw,'cfl',0.5);
 
 %%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 wall_name = 'r75hi';                        % Mast abdominal wall name
-sim.add_wall(wall_name,0,8);
+sim.add_wall(wall_name,0,0);
 
 % %%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
 % cC = 1e-3*[0 40];                           % Locations of cyst centers in [y z] (m)
