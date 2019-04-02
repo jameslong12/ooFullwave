@@ -1,4 +1,4 @@
-%  ooFullwave, v1.4.0
+%  ooFullwave, v2.0.0
 %
 %  Examples using fwObj to setup and run Fullwave simulations for focused,
 %  plane wave, and diverging transmits on linear arrays. Includes examples
