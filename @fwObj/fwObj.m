@@ -54,8 +54,10 @@ classdef fwObj < handle
             addOptional(p,'rho',1000)
             addOptional(p,'atten',0)
             addOptional(p,'B',0)
+            addOptional(p,'bovera',-2)
             addOptional(p,'f0',1e6)
             addOptional(p,'ncycles',2)
+            addOptional(p,'v',2)
             
             %%% Parse inputs and extract variables from p %%%%%%%%%%%%%%%%%
             p.parse(varargin{:})
@@ -83,6 +85,7 @@ classdef fwObj < handle
             rhomap = ones(nY,nZ)*rho;       % density map (kg/m^3)
             attenmap = ones(nY,nZ)*atten;   % attenuation map (dB/MHz/cm)
             Bmap = ones(nY,nZ)*B;           % nonlinearity map
+            boveramap = ones(nY,nZ)*bovera;
             
             %%% Package into structures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             obj.input_vars = struct('c0',c0,...
@@ -98,7 +101,8 @@ classdef fwObj < handle
                 'B',B,...
                 'f0',f0,...
                 'omega0',omega0,...
-                'lambda',lambda);
+                'lambda',lambda,...
+                'v',v);
             
             obj.grid_vars = struct('nY',nY,...
                 'nZ',nZ,...
@@ -110,10 +114,15 @@ classdef fwObj < handle
                 'z_axis',z_axis,...
                 't_axis',t_axis);
             
+            
             obj.field_maps = struct('cmap',cmap,...
                 'rhomap',rhomap,...
-                'attenmap',attenmap,...
-                'Bmap',Bmap);
+                'attenmap',attenmap);
+            if v==2
+                obj.field_maps.Bmap = Bmap;
+            elseif v==1
+                obj.field_maps.boveramap = boveramap;
+            end
             
         end
         

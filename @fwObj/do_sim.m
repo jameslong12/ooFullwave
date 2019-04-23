@@ -1,4 +1,4 @@
-function out = do_sim(obj, field_flag, v)
+function out = do_sim(obj, field_flag)
 
 %  Method to call Fullwave executable and perform simulation
 %
@@ -9,7 +9,6 @@ function out = do_sim(obj, field_flag, v)
 %           field_flag          - Flag to indicate entire field output. 1
 %                                 for field pressure data output, 0 for
 %                                 channel data (default = 0).
-%           v                   - Fullwave version (default = 1).
 %
 %  Returns:
 %           out                 - Simulation result data
@@ -18,7 +17,6 @@ function out = do_sim(obj, field_flag, v)
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
-if ~exist('v','var'), v = 1; end
 if field_flag
     p_size = 1;
     [modidy, modidz] = meshgrid(1:p_size:obj.grid_vars.nY,1:p_size:obj.grid_vars.nZ);
@@ -30,7 +28,7 @@ else
 end
 
 %%% Launch FullWave executable %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if v == 2
+if obj.input_vars.v == 2
     if isunix
         launch_fullwave2_try6_nln_attenuating(obj.input_vars.c0,...
             obj.input_vars.omega0, obj.input_vars.wY, obj.input_vars.wZ,...
