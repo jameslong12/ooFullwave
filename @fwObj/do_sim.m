@@ -18,9 +18,9 @@ function out = do_sim(obj, field_flag)
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
 if field_flag
-    p_size = 1;
-    [modidy, modidz] = meshgrid(1:p_size:obj.grid_vars.nY,1:p_size:obj.grid_vars.nZ);
-    obj.xdc.outmap(modidy,modidz) = 1;
+    dY=1:obj.xdc.p_size(2):obj.grid_vars.nY;
+    dZ=1:obj.xdc.p_size(3):obj.grid_vars.nZ;
+    obj.xdc.outmap(dY,dZ) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
 else
     obj.xdc.outmap = obj.xdc.inmap;
@@ -69,7 +69,8 @@ nRun=sizeOfFile('genout.dat')/4/ncoordsout;
 genout = readGenoutSlice(['genout.dat'],0:nRun-1,size(obj.xdc.outcoords,1));
 
 if field_flag
-    out = reshape(genout,size(genout,1),size(modidy,2),size(modidy,1));
+    out = reshape(genout,size(genout,1),length(dY),length(dZ));
+    out = out(1:obj.xdc.p_size(1):end,:,:);
 else
     for idx = 1:size(obj.xdc.outcoords)
         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);

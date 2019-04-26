@@ -16,6 +16,9 @@ function obj = make_xdc(obj)
 %           obj.xdc.tx_apod     - (Optional) Vector of transmit apodization
 %                                 applied to elements (default =
 %                                 ones(length(obj.xdc.on_elements),1))
+%           obj.xdc.p_size      - (Optional) Downsampling factors for
+%                                 [t,y,z] (pressure field only)
+%                                 (default = [1,1,1])
 %
 %  Returns:
 %           obj.xdc.width       - Element width (m)
@@ -39,6 +42,7 @@ elseif strcmp(obj.xdc.type, 'linear')
     
     if ~isfield(obj.xdc,'on_elements'); obj.xdc.on_elements = 1:obj.xdc.n; end
     if ~isfield(obj.xdc,'tx_apod'); obj.xdc.tx_apod = ones(length(obj.xdc.on_elements),1); end
+    if ~isfield(obj.xdc,'p_size'); obj.xdc.p_size = [1,1,1]; end
     
     obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
     e_size = round(obj.xdc.width/obj.grid_vars.dY);
