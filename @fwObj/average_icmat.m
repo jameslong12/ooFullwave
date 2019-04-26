@@ -18,6 +18,9 @@ icmat_corr = zeros(size(icmat_avg));
 mask = icmat_avg~=0;
 [~,mi] = max(mask,[],2); mii = min(mi(mi~=1));
 
+if(isempty(mii))
+    mii=1;
+end
 icmat_corr(:,1:size(icmat_corr,2)-mii+1) = icmat_avg(:,mii:end);
 
 end
