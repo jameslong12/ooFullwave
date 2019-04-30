@@ -20,13 +20,13 @@ if(obj.input_vars.v==1)
     [cwall, rhowall, attenwall, Bwall] = img2fieldFlatten(wall_name,dY,dZ,obj.input_vars.c0,obj.input_vars.rho);
     Bwall=-Bwall*obj.input_vars.rho*obj.input_vars.c0.^4;
 else
-    [cwall, rhowall, attenwall, Bwall] = img2fieldFlatten2(wall_name,dY,dZ,obj);
+    [cwall, rhowall, attenwall, Bwall] = img2fieldFlatten2(wall_name,dY,dZ);
 end
 
 if size(cwall,1) < obj.grid_vars.nY; error('Simulation width exceeds wall width.'); end
 if size(cwall,2) > obj.grid_vars.nZ; error('Wall depth exceeds simulation depth.'); end
 
-% Offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nY = obj.grid_vars.nY;
 nW = size(cwall,1);
 pad = round((nW-nY)/2);

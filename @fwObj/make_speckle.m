@@ -12,6 +12,7 @@ function obj = make_speckle(obj, varargin)
 %           rC:         Vector of cyst radii (m), length equal to nC
 %           cC:         Matrix of cyst center locations in [y,z] (m), length equal to nC
 %           zC:         Vector of cyst impedance contrast, length equal to nC
+%           offset:     Axial offset of scatterers and wall in lambda (5)
 %
 %  James Long, 12/17/2018 (Code partially from Nick Bottenus)
 
@@ -23,6 +24,7 @@ addOptional(p,'nscat',25)
 addParameter(p,'rC',[])
 addParameter(p,'cC',[])
 addParameter(p,'zC',[])
+addParameter(p,'offset',5);
 
 p.parse(varargin{:})
 var_struct = p.Results;
@@ -56,5 +58,13 @@ end
 
 %%% Superimpose original cmap and cscatmap %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.field_maps.cmap = obj.field_maps.cmap+cscatmap*csr.*obj.field_maps.cmap;
+
+%%% Axial offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+z_standoff = obj.input_vars.c0/obj.input_vars.f0*offset/2; 
+n_shift = find(obj.grid_vars.z_axis>=z_standoff,1); 
+obj.field_maps.cmap = circshift(obj.field_maps.cmap,[0 n_shift]); obj.field_maps.cmap(:,1:n_shift) = obj.input_vars.c0;
+obj.field_maps.rhomap = circshift(obj.field_maps.rhomap,[0 n_shift]); obj.field_maps.rhomap(:,1:n_shift) = obj.input_vars.rho;
+obj.field_maps.attenmap = circshift(obj.field_maps.attenmap,[0 n_shift]); obj.field_maps.attenmap(:,1:n_shift) = obj.input_vars.atten;
+obj.field_maps.Bmap = circshift(obj.field_maps.Bmap,[0 n_shift]); obj.field_maps.Bmap(:,1:n_shift) = obj.input_vars.B;
 
 end
