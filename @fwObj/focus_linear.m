@@ -53,6 +53,6 @@ for i=1:obj.xdc.n
     obj.xdc.out(i,1) = mean(obj.grid_vars.y_axis(obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2)));    
 end
 obj.xdc.delays=get_delays(obj,focus);
-obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi+max(obj.xdc.delays));
+obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
 
 end

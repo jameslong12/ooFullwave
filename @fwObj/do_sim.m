@@ -1,4 +1,4 @@
-function out = do_sim(obj, field_flag, v)
+function out = do_sim(obj, field_flag)
 
 %  Method to call Fullwave executable and perform simulation
 %
@@ -9,7 +9,6 @@ function out = do_sim(obj, field_flag, v)
 %           field_flag          - Flag to indicate entire field output. 1
 %                                 for field pressure data output, 0 for
 %                                 channel data (default = 0).
-%           v                   - Fullwave version (default = 1).
 %
 %  Returns:
 %           out                 - Simulation result data
@@ -18,11 +17,10 @@ function out = do_sim(obj, field_flag, v)
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
-if ~exist('v','var'), v = 1; end
 if field_flag
-    p_size = 1;
-    [modidy, modidz] = meshgrid(1:p_size:obj.grid_vars.nY,1:p_size:obj.grid_vars.nZ);
-    obj.xdc.outmap(modidy,modidz) = 1;
+    dY=1:obj.xdc.p_size(2):obj.grid_vars.nY;
+    dZ=1:obj.xdc.p_size(3):obj.grid_vars.nZ;
+    obj.xdc.outmap(dY,dZ) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
 else
     obj.xdc.outmap = obj.xdc.inmap;
@@ -30,7 +28,7 @@ else
 end
 
 %%% Launch FullWave executable %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if v == 2
+if obj.input_vars.v == 2
     if isunix
         launch_fullwave2_try6_nln_attenuating(obj.input_vars.c0,...
             obj.input_vars.omega0, obj.input_vars.wY, obj.input_vars.wZ,...
@@ -71,7 +69,8 @@ nRun=sizeOfFile('genout.dat')/4/ncoordsout;
 genout = readGenoutSlice(['genout.dat'],0:nRun-1,size(obj.xdc.outcoords,1));
 
 if field_flag
-    out = reshape(genout,size(genout,1),size(modidy,2),size(modidy,1));
+    out = reshape(genout,size(genout,1),length(dY),length(dZ));
+    out = out(1:obj.xdc.p_size(1):end,:,:);
 else
     for idx = 1:size(obj.xdc.outcoords)
         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
