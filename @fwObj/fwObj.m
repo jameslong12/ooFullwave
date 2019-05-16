@@ -20,6 +20,7 @@ classdef fwObj < handle
     %           rho             - Density in kg/m^3 (1000)
     %           atten           - Attenuation in dB/MHz/cm (0)
     %           B               - Non-linearity parameter (0)
+    %           v               - Version of Fullwave (2)
     %
     %  Return:
     %           obj             - Simulation object with properties:
@@ -132,8 +133,8 @@ classdef fwObj < handle
         obj = make_speckle(obj, varargin);
         obj = make_points(obj, varargin)
         obj = add_wall(obj, wall_name, offset, filt_size);
-        obj = add_fii_phantom(obj, phtm_file, el_lim, csr, fnum)
-        rf = do_sim(obj, field_flag, v);
+        obj = add_fii_phantom(obj, phtm_file, symmetry, el_lim, csr, fnum)
+        rf = do_sim(obj, field_flag);
         acq_params = make_acq_params(obj);
         
     end

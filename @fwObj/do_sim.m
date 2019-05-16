@@ -28,7 +28,9 @@ else
 end
 
 %%% Launch FullWave executable %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+echo off
 if obj.input_vars.v == 2
+    fprintf('    Launching Fullwave version 2\n')
     if isunix
         launch_fullwave2_try6_nln_attenuating(obj.input_vars.c0,...
             obj.input_vars.omega0, obj.input_vars.wY, obj.input_vars.wZ,...
@@ -63,6 +65,8 @@ else
         error('Fullwave is not supported on your operating system.')
     end
 end
+echo on
+
 %%% Reshape output data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ncoordsout=size(obj.xdc.outcoords,1);
 nRun=sizeOfFile('genout.dat')/4/ncoordsout;

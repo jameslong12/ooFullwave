@@ -1,4 +1,4 @@
-function acq_params = make_acq_params(obj)
+ function acq_params = make_acq_params(obj)
 
 %  Function to calculate acquisition parameters to match beamforming used
 %  by nbb5 and wjl11.
@@ -17,7 +17,12 @@ acq_params.fs=1/obj.grid_vars.dT;
 acq_params.f0=obj.input_vars.f0;
 acq_params.c=obj.input_vars.c0;
 acq_params.t0=obj.xdc.t0/obj.grid_vars.dT;
-acq_params.samples=length(obj.grid_vars.t_axis);
+
+if obj.input_vars.v == 2
+    acq_params.samples=length(obj.grid_vars.t_axis)-1;
+else
+    acq_params.samples=length(obj.grid_vars.t_axis);
+end
 acq_params.rx_pos=obj.xdc.out;
 acq_params.element_dir=[0 0 1];
 acq_params.apex=0;
