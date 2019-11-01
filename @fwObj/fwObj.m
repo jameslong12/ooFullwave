@@ -127,7 +127,8 @@ classdef fwObj < handle
         end
         
         obj = make_xdc(obj);
-        obj = focus_linear(obj, focus);
+        obj = preview_sim(obj);
+        obj = focus_linear(obj, focus, fc, fbw, excitation, bwr, tpe);
         icmat_avg = average_icmat(obj,icmat);
         delays = get_delays(focus,rx_pos,c);
         obj = make_speckle(obj, varargin);
