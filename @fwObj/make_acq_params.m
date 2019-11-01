@@ -27,8 +27,9 @@ acq_params.rx_pos=obj.xdc.out;
 acq_params.element_dir=[0 0 1];
 acq_params.apex=0;
 
-acq_params.tx_pos=[0,0,0];
-acq_params.theta=atand(obj.xdc.focus(1)/obj.xdc.focus(2));
+%acq_params.tx_pos=[0,0,0];
+acq_params.theta = 0;
+%acq_params.theta=atand(obj.xdc.focus(1)/obj.xdc.focus(2));
 acq_params.steer=[sind(acq_params.theta) 0 cosd(acq_params.theta)];
 acq_params.focus=[obj.xdc.focus(1) 0 obj.xdc.focus(2)];
 ind1=find(obj.xdc.delays==0,1,'first');
