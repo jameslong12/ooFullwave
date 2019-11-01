@@ -12,6 +12,7 @@ This repository contains an object-oriented wrapper for [Fullwave](https://gitla
 * [make_speckle()](make_speckle.m) - Add scatterers to field, with option to include cysts of tunable size and scattering properties
 * [make_points()](make_points.m) - Add point targets to field with varying impedance contrast 
 * [add_fii_phantom()](make_points.m) - Add Field II phantom using phantom output from [ultratrack](https://github.com/mlp6/ultratrack)
+* [preview_sim()](preview_sim.m) - Preview acoustic map, focusing delays, and transmitted pulse
 * [do_sim()](do_sim.m) - Perform simulation, with option to save channel data or field pressure distribution
 * [make_acq_params()](make_acq_params.m) - Convert simulation parameters to `acq_params`, necessary for use with beamforming tools
 
