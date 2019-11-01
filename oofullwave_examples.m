@@ -9,7 +9,7 @@
 
 %% Setup fwObj for varying transmit cases %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
-close; figure('pos',[2000 100 1200 600],'color','w')
+close; figure('pos',[-1900 100 1200 600],'color','w')
 msz = 100;
 
 %%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,7 +63,7 @@ xlabel('Element number'); ylabel('Time (us)'); title('Diverging delays')
 
 %% Setup fwObj to make changes to maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
-close; figure('pos',[2000 100 1400 500],'color','w')
+close; figure('pos',[-1900 100 1400 500],'color','w')
 cax = [1440 1640];
 
 %%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,9 +90,9 @@ xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
 title('Add abdominal wall')
 
 %%% Add speckle and cysts of varying impedance contrasts %%%%%%%%%%%%%%%%%%
-cC = 1e-3*[-15 50; -5 50; 5 50; 15 50];    % Locations of cyst centers in [y z] (m)
+cC = 1e-3*[-10 50; 0 50; 10 50];    % Locations of cyst centers in [y z] (m)
 rC = 0.004*ones(size(cC,1),1);             % Radii of cysts (m)
-zC = [0 0.025 0.075 0.1]';                 % Cyst relative impedance contrast
+zC = [0 0.5 2]';                 % Cyst relative impedance contrast
 sim.make_speckle('nscat',50,'csr',0.05,'nC',length(rC),'cC',cC,'rC',rC,'zC',zC);
 
 subplot(133)
