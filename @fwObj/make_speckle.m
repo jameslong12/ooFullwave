@@ -52,7 +52,7 @@ if nC
     for idx = 1:nC
         [z_int, y_int] = meshgrid(obj.grid_vars.z_axis, obj.grid_vars.y_axis);
         lesion_mask = (y_int-cC(idx,1)).^2+(z_int-cC(idx,2)).^2 < rC(idx).^2;
-        cscatmap(lesion_mask) = zC(idx)/csr*cscatmap(lesion_mask);
+        cscatmap(lesion_mask) = zC(idx)*cscatmap(lesion_mask);
     end
 end
 
@@ -62,9 +62,9 @@ obj.field_maps.cmap = obj.field_maps.cmap+cscatmap*csr.*obj.field_maps.cmap;
 %%% Axial offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 z_standoff = obj.input_vars.c0/obj.input_vars.f0*offset/2; 
 n_shift = find(obj.grid_vars.z_axis>=z_standoff,1); 
-obj.field_maps.cmap = circshift(obj.field_maps.cmap,[0 n_shift]); obj.field_maps.cmap(:,1:n_shift) = obj.input_vars.c0;
-obj.field_maps.rhomap = circshift(obj.field_maps.rhomap,[0 n_shift]); obj.field_maps.rhomap(:,1:n_shift) = obj.input_vars.rho;
-obj.field_maps.attenmap = circshift(obj.field_maps.attenmap,[0 n_shift]); obj.field_maps.attenmap(:,1:n_shift) = obj.input_vars.atten;
-obj.field_maps.Bmap = circshift(obj.field_maps.Bmap,[0 n_shift]); obj.field_maps.Bmap(:,1:n_shift) = obj.input_vars.B;
+obj.field_maps.cmap(:,1:n_shift) = obj.input_vars.c0;
+obj.field_maps.rhomap(:,1:n_shift) = obj.input_vars.rho;
+obj.field_maps.attenmap(:,1:n_shift) = obj.input_vars.atten;
+obj.field_maps.Bmap(:,1:n_shift) = obj.input_vars.B;
 
 end
