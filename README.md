@@ -1,6 +1,6 @@
 ## Object oriented tools for Fullwave simulations
 
-This repository contains an object-oriented wrapper for [Fullwave](https://gitlab.oit.duke.edu/ultrasound/fullwave2D) and an example script for usage. Fullwave is written by Gianmarco Pinton. The simulation output is written for compatibility with [this beamforming toolset.](https://gitlab.oit.duke.edu/nbb5/Beamforming)
+This repository contains an object-oriented wrapper for Fullwave and a demo script for usage. Fullwave is written by Gianmarco Pinton.
 
 ### Setup
 * [fwObj()](fwObj.m) - Initialize simulation object by setting parameters keywords-style
