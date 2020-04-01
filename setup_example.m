@@ -94,12 +94,7 @@ plot(sim.xdc.pulse_t,sim.xdc.pulse,'linewidth',linewidth)
 xlabel('Time (us)'); title('2-cycle pulse'); axis tight
 
 %%% 10-cycle pulse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ncycles = 10;
-sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td,'ncycles',ncycles);
-sim.xdc.type = 'linear';                    % Curvilinear or linear
-sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
-sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
-sim.xdc.n = 64;                             % Number of elements
+sim.input_vars.ncycles = 10;
 sim.make_xdc();                             % Call make_xdc to set up transducer
 focus = [0 0.03];                           % Focal point in [y z] (m)
 sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
@@ -166,3 +161,8 @@ subplot(133)
 imagesc(sim.grid_vars.y_axis*1e3,sim.grid_vars.z_axis*1e3,sim.field_maps.cmap',cax);
 xlabel('Lateral (mm)'); ylabel('Axial (mm)'); axis image
 title('Add speckle with cysts')
+
+%% Collect single transmit channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+t = tic;
+rf_data = double(sim.do_sim());
+fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
