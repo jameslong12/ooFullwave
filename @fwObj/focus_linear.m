@@ -43,6 +43,7 @@ tc = gauspuls('cutoff',fc,fbw,bwr,tpe);
 fs=1/obj.grid_vars.dT;
 tv = -tc:1/fs:tc;
 impulse_response = gauspuls(tv,fc,fbw);
+impulse_response = impulse_response-mean(impulse_response);
 obj.xdc.impulse_t = tv;
 obj.xdc.impulse = impulse_response;
 
@@ -53,7 +54,8 @@ pulse = conv(impulse_response,excitation);
 pulse = pulse/max(abs(pulse));
 obj.xdc.pulse_t = (0:length(pulse)-1)/fs;
 obj.xdc.pulse = pulse;
-
+obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
+obj.xdc.excitation = excitation;
 
 %%% Call focus_transmit to focus transmit beam %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 coord_row = 1:size(obj.xdc.incoords,1)/3;
