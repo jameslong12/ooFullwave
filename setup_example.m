@@ -86,11 +86,11 @@ focus = [0 0.03];                           % Focal point in [y z] (m)
 sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
 subplot(231)
 linewidth = 2;
-plot(sim.xdc.excitation_t,sim.xdc.excitation,'linewidth',linewidth)
+plot(sim.xdc.excitation_t*1e6,sim.xdc.excitation,'linewidth',linewidth)
 xlabel('Time (us)'); title('2-cycle excitation'); axis tight
 
 subplot(234)
-plot(sim.xdc.pulse_t,sim.xdc.pulse,'linewidth',linewidth)
+plot(sim.xdc.pulse_t*1e6,sim.xdc.pulse,'linewidth',linewidth)
 xlabel('Time (us)'); title('2-cycle pulse'); axis tight
 
 %%% 10-cycle pulse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,11 +100,11 @@ focus = [0 0.03];                           % Focal point in [y z] (m)
 sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
 subplot(232)
 linewidth = 2;
-plot(sim.xdc.excitation_t,sim.xdc.excitation,'linewidth',linewidth)
+plot(sim.xdc.excitation_t*1e6,sim.xdc.excitation,'linewidth',linewidth)
 xlabel('Time (us)'); title('10-cycle excitation'); axis tight
 
 subplot(235)
-plot(sim.xdc.pulse_t,sim.xdc.pulse,'linewidth',linewidth)
+plot(sim.xdc.pulse_t*1e6,sim.xdc.pulse,'linewidth',linewidth)
 xlabel('Time (us)'); title('10-cycle pulse'); axis tight
 
 %%% Chirp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -116,11 +116,11 @@ excitation = sin(2*pi*flow*t+phi);
 sim.focus_linear(focus,[],[],excitation); 
 subplot(233)
 linewidth = 2;
-plot(sim.xdc.excitation_t,sim.xdc.excitation,'linewidth',linewidth)
+plot(sim.xdc.excitation_t*1e6,sim.xdc.excitation,'linewidth',linewidth)
 xlabel('Time (us)'); title('Chirp excitation'); axis tight
 
 subplot(236)
-plot(sim.xdc.pulse_t,sim.xdc.pulse,'linewidth',linewidth)
+plot(sim.xdc.pulse_t*1e6,sim.xdc.pulse,'linewidth',linewidth)
 xlabel('Time (us)'); title('Chirp pulse'); axis tight
 
 %% Setup fwObj to make changes to maps %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
