@@ -40,6 +40,5 @@ fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
 
 %% 7. Collect full field pressure data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 t = tic;
-% sim.xdc.p_size = [1 1 1];
 p = double(sim.do_sim(1));
 fprintf('   Field pressure data generated in %1.2f seconds \n',toc(t))
