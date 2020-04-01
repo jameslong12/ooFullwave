@@ -90,7 +90,8 @@ phi = k*t.^2;
 excitation = sin(2*pi*flow*t+phi);
 sim.focus_linear(focus,[],[],excitation); 
 ```
-The excitation may be altered by changing the `ncycles` input variable or manually defining an excitation sequence prior to calling `focus_linear()`. Here, the default 2-cycle pulse is shown with a 10-cycle and chirp variant.
+The excitation may be altered by changing the `ncycles` input variable or manually defining an excitation sequence prior to calling `focus_linear()`. Here, the default 2-cycle pulse is shown with a 10-cycle and chirp variant:
+![alt text](excitation.png)
 
 ```
 %%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
