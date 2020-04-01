@@ -29,8 +29,8 @@ This repository contains an object-oriented wrapper for Fullwave and a demo scri
 * If desired, change the field maps via `add_wall()`, `make_speckle()`, `make_points()`, or `add_fii_phantom()`
 * Run the simulation with `do_sim()`
 
-### Example script walkthrough
-* [oofullwave_examples.m](oofullwave_examples.m) - Example usage with varying focal configurations and simple field map changes
+### Example set up
+* [setup_example.m](setup_example.m) - Example usage with varying focal configurations and simple field map changes
 
 ```
 %%% Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,6 +72,27 @@ The corresponding `icmat` and element-wise focal delays can be seen here:
 ![alt text](transmit.png)
 
 ```
+%%% 2-cycle pulse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+focus = [0 0.03];                           % Focal point in [y z] (m)
+sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
+
+%%% 10-cycle pulse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sim.input_vars.ncycles = 10;
+sim.make_xdc();                             % Call make_xdc to set up transducer
+focus = [0 0.03];                           % Focal point in [y z] (m)
+sim.focus_linear(focus);                    % Call focus_linear to calculate icmat
+
+%%% Chirp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+flow = 1e6; fhigh = 3e6;
+t = 0:sim.grid_vars.dT:6e-6; 
+k = (pi/max(t))*(fhigh-flow);
+phi = k*t.^2;
+excitation = sin(2*pi*flow*t+phi);
+sim.focus_linear(focus,[],[],excitation); 
+```
+The excitation may be altered by changing the `ncycles` input variable or manually defining an excitation sequence prior to calling `focus_linear()`. Here, the default 2-cycle pulse is shown with a 10-cycle and chirp variant.
+
+```
 %%% Add abdominal wall with lateral offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 wall_name = 'r75hi';                        % Mast abdominal wall name
 offset = 0.01;                              % Lateral offset from center (m)
@@ -96,6 +117,9 @@ rf_data = double(sim.do_sim());
 fprintf('   Channel data generated in %1.2f seconds \n',toc(t))
 ```
 Finally, the simulation is run by calling `do_sim()`. Here, we collect single transmit channel data.
+
+### Demo
+A simple demo for a 1 MHz pulse focused at 4 cm through an abdominal wall can be found in [demo.m](setup_example.m).
 
 ### References
 * Fullwave: [Pinton, G. F., Dahl, J., Rosenzweig, S., & Trahey, G. E. (2009). A heterogeneous nonlinear attenuating full-wave model of ultrasound. IEEE transactions on ultrasonics, ferroelectrics, and frequency control, 56(3).](https://ieeexplore.ieee.org/abstract/document/4816057)
