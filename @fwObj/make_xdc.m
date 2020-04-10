@@ -38,9 +38,25 @@ if strcmp(obj.xdc.type, 'curvilinear')
     assert(isfield(obj.xdc,'n'),'Unidentified number of elements (n) in obj.xdc.')
     assert(isfield(obj.xdc,'r'),'Unidentified convex radius (r) in obj.xdc.')
 
-    keyboard
-    error('Curvilinear not ready yet, bother James about it.')
+    if ~isfield(obj.xdc,'on_elements'); obj.xdc.on_elements = 1:obj.xdc.n; end
+    if ~isfield(obj.xdc,'tx_apod'); obj.xdc.tx_apod = ones(length(obj.xdc.on_elements),1); end
+    if ~isfield(obj.xdc,'p_size'); obj.xdc.p_size = [1,1,1]; end
     
+    obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
+    sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
+    e_size = round(obj.xdc.width/obj.grid_vars.dY);
+    e_minsize = round(e_size*cos(theta_xdc/2));
+    assert(e_minsize>0,'Pixel size exceeds minimum element size in lateral dimension.')
+    
+    theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
+    
+    yp = sin(theta)*obj.xdc.r;
+    zp = cos(theta)*obj.xdc.r; zp = zp-min(zp);
+    e_size = round(e_size*cos(theta));
+    
+    [~,iy] = min(abs(yp-obj.grid_vars.y_axis'));
+    e_indy = [iy(:) iy(:)+e_size(:)];
+    keyboard
 elseif strcmp(obj.xdc.type, 'linear')
     assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
     assert(isfield(obj.xdc,'kerf'),'Unidentified element kerf in obj.xdc.')

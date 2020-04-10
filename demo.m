@@ -9,17 +9,18 @@
 %% 1. Create fwObj %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 c0 = 1540;                                  % Homogeneous speed of sound
-f0 = 1e6;                                   % Transmit center frequency (Hz)
+f0 = 3e6;                                   % Transmit center frequency (Hz)
 wZ = 6e-2;                                  % Axial extent (m)
-wY = 4e-2;                                  % Lateral extent (m)
+wY = 10e-2;                                  % Lateral extent (m)
 td =(wZ+1e-2)/c0;                           % Time duration of simulation (s)
 sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td);
 
-%% 2. Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2. Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%
 sim.xdc.type = 'curvilinear';                    % Curvilinear or linear
 sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
 sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
-sim.xdc.n = 64;                             % Number of elements
+sim.xdc.n = 192;                             % Number of elements
+sim.xdc.r = 0.05;                           % Convex radius
 sim.make_xdc();                             % Call make_xdc to set up transducer
 
 %% 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
