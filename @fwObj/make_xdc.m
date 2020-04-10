@@ -33,6 +33,12 @@ obj.xdc.outmap = zeros(size(obj.field_maps.cmap));
 if obj.grid_vars.dY > obj.xdc.pitch, error('Grid spacing is too large.'); end
 
 if strcmp(obj.xdc.type, 'curvilinear')
+    assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
+    assert(isfield(obj.xdc,'kerf'),'Unidentified element kerf in obj.xdc.')
+    assert(isfield(obj.xdc,'n'),'Unidentified number of elements (n) in obj.xdc.')
+    assert(isfield(obj.xdc,'r'),'Unidentified convex radius (r) in obj.xdc.')
+
+    keyboard
     error('Curvilinear not ready yet, bother James about it.')
     
 elseif strcmp(obj.xdc.type, 'linear')
