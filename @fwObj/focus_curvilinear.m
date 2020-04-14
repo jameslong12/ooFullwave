@@ -5,7 +5,7 @@ if ~exist('fbw','var')||isempty(fbw), fbw = 0.8; end
 if ~exist('bwr','var')||isempty(bwr), bwr=-6; end
 if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
 
-%%% Initialize inmap and incoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Initialize inmap %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
 theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
 zp = cos(theta)*obj.xdc.r; zp = zp-min(zp);
@@ -20,13 +20,8 @@ p_all = zeros(1,size(inmap,1));
 for i = 1:size(obj.xdc.e_ind,1)-1
     p_all(obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2)) = 1;
 end
-inmap(~logical(p_all),:) = 0;
 obj.xdc.inmap = inmap;
 obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp);
-
-
-keyboard
-obj.xdc.incoords = mapToCoords(obj.xdc.inmap);
 
 %%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%%%%%
 fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;
@@ -49,6 +44,19 @@ obj.xdc.pulse_t = (0:length(pulse)-1)/fs;
 obj.xdc.pulse = pulse;
 obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
 obj.xdc.excitation = excitation;
+
+ey = (obj.xdc.y-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
+ez = (obj.xdc.z-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
+t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
+icvec = zeros(size(obj.grid_vars.t_axis));
+icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
+icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
+
+icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
+for i = 1:obj.xdc.n
+    ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
+    icmat(ind,:) = repmat(icmat_sub(i,:),numel(ind),1);
+end
 
 keyboard
 %%% Call focus_transmit to focus transmit beam %%%%%%%%%%%%%%%%%%%%%%%%%%%%

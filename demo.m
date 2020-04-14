@@ -24,7 +24,7 @@ sim.xdc.n = 192;                             % Number of elements
 sim.xdc.r = 0.05;                           % Convex radius
 sim.make_xdc();                             % Call make_xdc to set up transducer
 
-%% 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 focus = [0 0.04];                           % Focal point in [y z] (m)
 sim.focus_curvilinear(focus);                    % Call focus_linear to calculate icmat
 
