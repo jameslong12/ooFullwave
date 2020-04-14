@@ -45,17 +45,21 @@ if strcmp(obj.xdc.type, 'curvilinear')
     obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
     sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
     e_size = round(obj.xdc.width/obj.grid_vars.dY);
-    e_minsize = round(e_size*cos(theta_xdc/2));
+    e_minsize = floor(e_size*cos(theta_xdc/2));
     assert(e_minsize>0,'Pixel size exceeds minimum element size in lateral dimension.')
     
     theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
     
     yp = sin(theta)*obj.xdc.r;
     zp = cos(theta)*obj.xdc.r; zp = zp-min(zp);
-    e_size = round(e_size*cos(theta));
+    e_size = floor(e_size*cos(theta));
     
     [~,iy] = min(abs(yp-obj.grid_vars.y_axis'));
+    [~,iz] = min(abs(zp-obj.grid_vars.z_axis'));
     e_indy = [iy(:) iy(:)+e_size(:)];
+    
+    
+    
     keyboard
 elseif strcmp(obj.xdc.type, 'linear')
     assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
