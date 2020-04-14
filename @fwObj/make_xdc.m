@@ -72,6 +72,8 @@ if strcmp(obj.xdc.type, 'curvilinear')
     end
     obj.xdc.e_ind = e_ind;
     inmap(~logical(p_all),:) = 0;
+    obj.xdc.inmap = inmap;
+    obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp);
     for i = 1:size(e_ind,1)
         inmap(e_ind(i,1):e_ind(i,2),:) = i*inmap(e_ind(i,1):e_ind(i,2),:);
     end
