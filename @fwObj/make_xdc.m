@@ -46,7 +46,8 @@ if strcmp(obj.xdc.type, 'curvilinear')
     obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
     sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
     theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
-    yp = sin(theta)*obj.xdc.r;
+    yp = sin(theta)*obj.xdc.r; obj.xdc.y = yp;
+    zp = cos(theta)*obj.xdc.r; obj.xdc.z = zp-max(zp);
     assert(~any(yp<min(obj.grid_vars.y_axis)),'Aperture too large for grid size.')
     assert(~any(yp>max(obj.grid_vars.y_axis)),'Aperture too large for grid size.')
 
@@ -60,7 +61,7 @@ if strcmp(obj.xdc.type, 'curvilinear')
         end
     end
     obj.xdc.e_ind = e_ind;
-    
+    warning('Due to curvature of array, maximum depth is now %.3f',obj.input_vars.wZ+min(obj.xdc.z))
 elseif strcmp(obj.xdc.type, 'linear')
     assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
     assert(isfield(obj.xdc,'kerf'),'Unidentified element kerf in obj.xdc.')
