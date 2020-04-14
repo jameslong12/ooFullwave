@@ -47,36 +47,19 @@ if strcmp(obj.xdc.type, 'curvilinear')
     sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
     theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
     yp = sin(theta)*obj.xdc.r;
-    
     assert(~any(yp<min(obj.grid_vars.y_axis)),'Aperture too large for grid size.')
     assert(~any(yp>max(obj.grid_vars.y_axis)),'Aperture too large for grid size.')
-    
-    zp = cos(theta)*obj.xdc.r; zp = zp-min(zp);
-    inmap = zeros(size(obj.field_maps.cmap));
-    [zg,yg] = meshgrid(obj.grid_vars.z_axis,obj.grid_vars.y_axis);
-    inmap(yg.^2+(zg+obj.xdc.r-max(zp)).^2<obj.xdc.r^2) = 1;
-    for i=1:size(inmap,1)
-        j=find(inmap(i,:)==0); j=j(1);
-        inmap(i,1:max([j-5 0]))=0;
-    end
+
     wy = obj.xdc.width*cos(theta);
     iy = [yp(:)-wy(:)/2 yp(:)+wy(:)/2];
     [~,e_ind(:,1)] = min(abs(iy(:,1)'-obj.grid_vars.y_axis'));
     [~,e_ind(:,2)] = min(abs(iy(:,2)'-obj.grid_vars.y_axis'));
-    p_all = zeros(1,size(inmap,1));
     for i = 1:size(e_ind,1)-1
         if e_ind(i,2) == e_ind(i+1,1)
             e_ind(i+1,1) = e_ind(i+1,1)+1;
         end
-        p_all(e_ind(i,1):e_ind(i,2)) = 1;
     end
     obj.xdc.e_ind = e_ind;
-    inmap(~logical(p_all),:) = 0;
-    obj.xdc.inmap = inmap;
-    obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp);
-    for i = 1:size(e_ind,1)
-        inmap(e_ind(i,1):e_ind(i,2),:) = i*inmap(e_ind(i,1):e_ind(i,2),:);
-    end
     
 elseif strcmp(obj.xdc.type, 'linear')
     assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
