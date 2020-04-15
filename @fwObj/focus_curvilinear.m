@@ -24,10 +24,11 @@ end
 outmap = inmap;
 
 % define incoords
-incoords = mapToCoords(inmap);
+incoords = make_incoords_row(obj,inmap);
+
 for i = 1:layers-1
     inter = circshift(inmap,[0 -i]);
-    incoords = [incoords; mapToCoords(inter)];
+    incoords = [incoords; make_incoords_row(obj,inter)];
 end
 for i = 1:size(inmap,1)
     inmap(i,find(inmap0(i,:)==1):find(inmap0(i,:)==1)+layers-1) = 1;

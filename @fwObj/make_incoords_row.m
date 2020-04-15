@@ -1,17 +1,18 @@
-function incoords = make_incoords_row(inmap)
+function incoords = make_incoords_row(obj,inmap)
 
-% Replacement for mapToCoords to make definition curvilinear arrays easier
+%  Replacement for mapToCoords to make definition curvilinear arrays easier
+%
+%  James Long 04/15/2020
 
-% check for single row
 inmapsum = sum(inmap,2);
-assert(~any(inmapsum~=1),'must be a full row of 1''s')
-keyboard
+assert(~any(inmapsum~=1),'inmap must be defined across lateral span')
+assert(size(inmap,1)==obj.grid_vars.nY,'inmap must match dimensions of grid.')
+assert(size(inmap,2)==obj.grid_vars.nZ,'inmap must match dimensions of grid.')
 
 for i = 1:size(inmap,1)
-    
-% [idx idy] = find(map~=0);
-% coords = [idx-1 idy-1];
-incoords = 0;
+    idy(i) = find(logical(inmap(i,:)));
+    idx(i) = i;
 end
+incoords = [idx(:) idy(:)]-1;
 
 end
