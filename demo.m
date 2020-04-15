@@ -25,7 +25,7 @@ sim.xdc.r = 0.05;                           % Convex radius
 sim.make_xdc();                             % Call make_xdc to set up transducer
 
 % 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-focus = [0 0.04];                           % Focal point in [y z] (m)
+focus = [0 0.05];                           % Focal point in [y z] (m)
 sim.focus_curvilinear(focus);                    % Call focus_linear to calculate icmat
 
 %% 4. Add abdominal wall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,7 +34,7 @@ sim.add_wall(wall_name);
 
 %% 5. Preview simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
-% sim.preview_sim()
+sim.preview_sim()
 
 %% 6. Collect channel data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 t = tic;

@@ -30,7 +30,8 @@ if ~exist('fc','var')||isempty(fc), fc = obj.input_vars.f0; end
 if ~exist('fbw','var')||isempty(fbw), fbw = 0.8; end
 if ~exist('bwr','var')||isempty(bwr), bwr=-6; end
 if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
-
+assert(strcmp(obj.xdc.type, 'linear'),'Transducer must be defined as linear.')
+    
 %%% Initialize inmap and incoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.xdc.inmap(:,1:3) = 1;
 obj.xdc.incoords = mapToCoords(obj.xdc.inmap);

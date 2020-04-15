@@ -4,24 +4,37 @@ if ~exist('fc','var')||isempty(fc), fc = obj.input_vars.f0; end
 if ~exist('fbw','var')||isempty(fbw), fbw = 0.8; end
 if ~exist('bwr','var')||isempty(bwr), bwr=-6; end
 if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
+assert(strcmp(obj.xdc.type, 'curvilinear'),'Transducer must be defined as curvilinear.')
+
+layers = 5;
 
 %%% Initialize inmap %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
 theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
 zp = cos(theta)*obj.xdc.r; zp = zp-min(zp);
-inmap = zeros(size(obj.field_maps.cmap));
+inmap0 = zeros(size(obj.field_maps.cmap)); inmap0(:,1) = 1;
 [zg,yg] = meshgrid(obj.grid_vars.z_axis,obj.grid_vars.y_axis);
-inmap(yg.^2+(zg+obj.xdc.r-max(zp)).^2<obj.xdc.r^2) = 1;
-for i=1:size(inmap,1)
-    j=find(inmap(i,:)==0); j=j(1);
-    inmap(i,1:max([j-2 0]))=0;
+inmap0(yg.^2+(zg+obj.xdc.r-max(zp)).^2<obj.xdc.r^2) = 1;
+inmap = zeros(size(inmap0));
+for i=1:size(inmap0,1)
+    j=find(inmap0(i,:)==0); j=j(1);
+    inmap0(i,1:max([j-2 0]))=0;
+    inmap(i,find(inmap0(i,:)==1)+layers-1) = 1;
 end
-p_all = zeros(1,size(inmap,1));
-for i = 1:size(obj.xdc.e_ind,1)-1
-    p_all(obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2)) = 1;
+outmap = inmap;
+
+% define incoords
+incoords = mapToCoords(inmap);
+for i = 1:layers-1
+    inter = circshift(inmap,[0 -i]);
+    incoords = [incoords; mapToCoords(inter)];
+end
+for i = 1:size(inmap,1)
+    inmap(i,find(inmap0(i,:)==1):find(inmap0(i,:)==1)+layers-1) = 1;
 end
 obj.xdc.inmap = inmap;
-obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp);
+obj.xdc.incoords = incoords;
+obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp)-(layers-1)*obj.grid_vars.dZ;
 
 %%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%%%%%
 fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;
@@ -45,43 +58,31 @@ obj.xdc.pulse = pulse;
 obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
 obj.xdc.excitation = excitation;
 
-ey = (obj.xdc.y-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
-ez = (obj.xdc.z-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
+ey = (obj.xdc.out(:,1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
+ez = (obj.xdc.out(:,3)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
+
 t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
 icvec = zeros(size(obj.grid_vars.t_axis));
 icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
 icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
-
 icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
 for i = 1:obj.xdc.n
-    ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-    icmat(ind,:) = repmat(icmat_sub(i,:),numel(ind),1);
+    indy = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
+    icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1);
 end
 
-keyboard
-%%% Call focus_transmit to focus transmit beam %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-coord_row = 1:size(obj.xdc.incoords,1)/3;
-t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
-icvec = zeros(size(obj.grid_vars.t_axis));
-icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
-icmat = average_icmat(obj,focus_transmit(obj,fy,fz,icvec,obj.xdc.incoords(coord_row,:)));
-
-coord_row = size(obj.xdc.incoords,1)/3+1:2*size(obj.xdc.incoords,1)/3;
-tnew=t-obj.grid_vars.dT/obj.input_vars.cfl;
-icvec = interp1(t,icvec,tnew,[],0);
-icmat_add = average_icmat(obj,focus_transmit(obj,fy,fz,icvec,obj.xdc.incoords(coord_row,:)));
-icmat = [icmat; icmat_add];
-
-coord_row = 2*size(obj.xdc.incoords,1)/3+1:size(obj.xdc.incoords,1);
-tneww=tnew-obj.grid_vars.dT/obj.input_vars.cfl;
-icvec = interp1(tnew,icvec,tneww,[],0);
-icmat_add = average_icmat(obj,focus_transmit(obj,fy,fz,icvec,obj.xdc.incoords(coord_row,:)));
-obj.xdc.icmat = [icmat; icmat_add];
-
-obj.xdc.out = zeros(obj.xdc.n,3);
-for i=1:obj.xdc.n
-    obj.xdc.out(i,1) = mean(obj.grid_vars.y_axis(obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2)));
+for i = 1:layers-1
+    tnew=t-i*(obj.grid_vars.dT/obj.input_vars.cfl);
+    icvec = interp1(t,icvec,tnew,[],0);
+    icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
+    icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
+    for i = 1:obj.xdc.n
+        ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
+        icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1);
+    end
+    icmat = [icmat; icmat_add];
 end
+obj.xdc.icmat = icmat;
 obj.xdc.delays=get_delays(obj,focus);
 obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
 
