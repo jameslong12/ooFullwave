@@ -18,12 +18,10 @@ function out = do_sim(obj, field_flag)
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
 if field_flag
+    % redefine outmap and outcoords
     dY=1:obj.xdc.p_size(2):obj.grid_vars.nY;
     dZ=1:obj.xdc.p_size(3):obj.grid_vars.nZ;
     obj.xdc.outmap(dY,dZ) = 1;
-    obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
-else
-    obj.xdc.outmap = obj.xdc.inmap;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
 end
 

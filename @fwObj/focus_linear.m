@@ -32,11 +32,14 @@ if ~exist('bwr','var')||isempty(bwr), bwr=-6; end
 if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
 assert(strcmp(obj.xdc.type, 'linear'),'Transducer must be defined as linear.')
     
-%%% Initialize inmap and incoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-obj.xdc.inmap(:,1:3) = 1;
+%%% Initialize in/outmap and in/outcoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+layers = 3;
+obj.xdc.inmap(:,1:layers) = 1;
 obj.xdc.incoords = mapToCoords(obj.xdc.inmap);
-% fix this later
-
+obj.xdc.outmap = zeros(size(obj.xdc.inmap));
+obj.xdc.outmap(:,layers) = 1;
+obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
+obj.grid_vars.z_axis = obj.grid_vars.z_axis-(layers-1)*obj.grid_vars.dZ;
 
 %%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%%%%%
 fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;
