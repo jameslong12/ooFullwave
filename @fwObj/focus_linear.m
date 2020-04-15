@@ -35,6 +35,8 @@ assert(strcmp(obj.xdc.type, 'linear'),'Transducer must be defined as linear.')
 %%% Initialize inmap and incoords %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 obj.xdc.inmap(:,1:3) = 1;
 obj.xdc.incoords = mapToCoords(obj.xdc.inmap);
+% fix this later
+
 
 %%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%%%%%
 fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;

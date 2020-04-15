@@ -21,10 +21,11 @@ for i=1:size(inmap0,1)
     inmap0(i,1:max([j-2 0]))=0;
     inmap(i,find(inmap0(i,:)==1)+layers-1) = 1;
 end
-outmap = inmap;
+obj.xdc.outmap = inmap;
 
 % define incoords
 incoords = make_incoords_row(obj,inmap);
+obj.xdc.outcoords = incoords;
 
 for i = 1:layers-1
     inter = circshift(inmap,[0 -i]);

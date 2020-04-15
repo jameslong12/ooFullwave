@@ -77,7 +77,8 @@ if field_flag
     out = out(1:obj.xdc.p_size(1):end,:,:);
 else
     for idx = 1:size(obj.xdc.outcoords)
-        genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
+%         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
+        genout_re(:,obj.xdc.outcoords(idx,1)+1) = genout(:,idx);
     end
 
     %%% Average across output to reconstruct element traces %%%%%%%%%%%%%%%
