@@ -16,22 +16,22 @@ td =(wZ+1e-2)/c0;                               % Time duration of simulation (s
 ppw = 12;
 sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td,'ppw',ppw);
 
-%% 2. Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%
-sim.xdc.type = 'linear';                        % Curvilinear or linear
+% 2. Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%
+sim.xdc.type = 'curvilinear';                        % Curvilinear or linear
 sim.xdc.pitch = 0.000412;                       % Center-to-center element spacing
-sim.xdc.n = 64;                                 % Number of elements
+sim.xdc.n = 128;                                 % Number of elements
 sim.xdc.r = 0.04;                               % Convex radius
 sim.make_xdc();                                 % Call make_xdc to set up transducer
 
-%% 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 focus = [0 0.04];                               % Focal point in [y z] (m)
 sim.focus_xdc(focus);                           % Call focus_xdc to calculate icmat
 
-%% 4. Add abdominal wall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4. Add abdominal wall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 wall_name = 'r75hi';                            % Mast abdominal wall name
 sim.add_wall(wall_name);
 
-%% 5. Preview simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 5. Preview simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 sim.preview_sim()
 

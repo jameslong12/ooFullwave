@@ -10,7 +10,7 @@ function obj = add_wall(obj, wall_name, offset, filt_size)
 %           offset              - Lateral offset from center (m)
 %           filt_size           - Factor for Gaussian blurring (default: 12)
 %
-%  James Long, 01/16/2019
+%  James Long, 04/16/2020
 
 if ~exist('offset','var'); offset=0; end
 
@@ -50,13 +50,18 @@ if filt_size ~= 0
 end
 
 % Add to field_maps structure %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-obj.field_maps.cmap(:,1:size(cwall,2)) = cwall;
-obj.field_maps.rhomap(:,1:size(cwall,2)) = rhowall;
-obj.field_maps.attenmap(:,1:size(cwall,2)) = attenwall;
-
-if(obj.input_vars.v==1)
-    obj.field_maps.boveramap(:,1:size(cwall,2)) = (Bwall-1)*2;
-elseif(obj.input_vars.v==2)
-    obj.field_maps.Bmap(:,1:size(cwall,2)) = Bwall;
+ind = 1:size(cwall,2);
+ax = 2*obj.input_vars.ppw;
+for i = 1:size(obj.xdc.inmap,1)
+    int = find(obj.xdc.inmap(i,:)==1,1,'last');
+    obj.field_maps.cmap(i,ind+ax+int) = cwall(i,:);
+    obj.field_maps.rhomap(i,ind+ax+int) = rhowall(i,:);
+    obj.field_maps.attenmap(i,ind+ax+int) = attenwall(i,:);
+    if(obj.input_vars.v==1)
+        obj.field_maps.boveramap(i,ind+ax+int) = (Bwall(i,:)-1)*2;
+    elseif(obj.input_vars.v==2)
+        obj.field_maps.Bmap(i,ind+ax+int) = Bwall(i,:);
+    end
+end
 
 end
