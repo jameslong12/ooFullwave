@@ -26,7 +26,7 @@ sim.make_xdc();                             % Call make_xdc to set up transducer
 
 % 3. Focus transmit at 4 cm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 focus = [0 0.05];                           % Focal point in [y z] (m)
-sim.focus_curvilinear(focus);                    % Call focus_linear to calculate icmat
+sim.focus_xdc(focus);                    % Call focus_linear to calculate icmat
 
 %% 4. Add abdominal wall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 wall_name = 'r75hi';                        % Mast abdominal wall name

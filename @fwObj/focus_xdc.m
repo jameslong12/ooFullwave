@@ -30,11 +30,9 @@ if ~exist('fbw','var')||isempty(fbw), fbw = 0.8; end
 if ~exist('bwr','var')||isempty(bwr), bwr=-6; end
 if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
 
-if strcmp(obj.xdc.type, 'curvilinear')
-    
+%%% Define in/out parameters, shift z_axis %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if strcmp(obj.xdc.type, 'curvilinear') 
     layers = 5;
-    
-    %%% Define in/out parameters, shift z_axis %%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
     theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
     zp = cos(theta)*obj.xdc.r; zp = zp-min(zp);
@@ -61,102 +59,71 @@ if strcmp(obj.xdc.type, 'curvilinear')
     obj.xdc.inmap = inmap; obj.xdc.incoords = incoords;
     obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp)-(layers-1)*obj.grid_vars.dZ;
     
-    %%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%
-    fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;
-    fz = (focus(2)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ+1;
-    tc = gauspuls('cutoff',fc,fbw,bwr,tpe);
-    fs=1/obj.grid_vars.dT;
-    tv = -tc:1/fs:tc;
-    impulse_response = gauspuls(tv,fc,fbw);
-    impulse_response = impulse_response-mean(impulse_response);
-    obj.xdc.impulse_t = tv;
-    obj.xdc.impulse = impulse_response;
-    if ~exist('excitation','var')||isempty(excitation)
-        excitation = sin(2*pi*obj.input_vars.f0*(0:1/fs:obj.input_vars.ncycles/obj.input_vars.f0));
-    end
-    pulse = conv(impulse_response,excitation);
-    pulse = pulse/max(abs(pulse));
-    obj.xdc.pulse_t = (0:length(pulse)-1)/fs;
-    obj.xdc.pulse = pulse;
-    obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
-    obj.xdc.excitation = excitation;
-    
-    %%% Calculate delays for all layers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    ey = (obj.xdc.out(:,1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
-    ez = (obj.xdc.out(:,3)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
-    t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
-    icvec = zeros(size(obj.grid_vars.t_axis));
-    icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
-    icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
-    icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
-    for i = 1:obj.xdc.n
-        indy = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-        icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1);
-    end
-    for i = 1:layers-1
-        tnew=t-i*(obj.grid_vars.dT/obj.input_vars.cfl);
-        icvec = interp1(t,icvec,tnew,[],0);
-        icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
-        icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
-        for i = 1:obj.xdc.n
-            ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-            icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1);
-        end
-        icmat = [icmat; icmat_add];
-    end
-    obj.xdc.icmat = icmat;
-    obj.xdc.delays=get_delays(obj,focus);
-    obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
-elseif strcmp(obj.xdc.type, 'linear')
-    
+elseif strcmp(obj.xdc.type, 'linear')    
     layers = 3;
-    
-    %%% Define in/out parameters, shift z_axis %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    obj.xdc.inmap(:,1:layers) = 1;
-    obj.xdc.incoords = mapToCoords(obj.xdc.inmap);
-    obj.xdc.outmap = zeros(size(obj.xdc.inmap));
-    obj.xdc.outmap(:,layers) = 1;
-    obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
+    inmap = zeros(size(obj.field_maps.cmap));
+    inmap(:,layers) = 1;
+    obj.xdc.outmap = inmap;
+    incoords = make_incoords_row(obj,inmap);
+    obj.xdc.outcoords = incoords;
+    for i = 1:layers-1
+        inter = circshift(inmap,[0 -i]);
+        incoords = [incoords; make_incoords_row(obj,inter)];
+    end
+    inmap(:.1:layers) = 1;
+    obj.xdc.inmap = inmap; obj.xdc.incoords = incoords;
     obj.grid_vars.z_axis = obj.grid_vars.z_axis-(layers-1)*obj.grid_vars.dZ;
     
-    %%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%
-    fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;
-    fz = (focus(2)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ+1;
-    tc = gauspuls('cutoff',fc,fbw,bwr,tpe);
-    fs=1/obj.grid_vars.dT;
-    tv = -tc:1/fs:tc;
-    impulse_response = gauspuls(tv,fc,fbw);
-    impulse_response = impulse_response-mean(impulse_response);
-    obj.xdc.impulse_t = tv;
-    obj.xdc.impulse = impulse_response;
-    if ~exist('excitation','var')||isempty(excitation)
-        excitation = sin(2*pi*obj.input_vars.f0*(0:1/fs:obj.input_vars.ncycles/obj.input_vars.f0));
-    end
-    pulse = conv(impulse_response,excitation);
-    pulse = pulse/max(abs(pulse));
-    obj.xdc.pulse_t = (0:length(pulse)-1)/fs;
-    obj.xdc.pulse = pulse;
-    obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
-    obj.xdc.excitation = excitation;
-    
-    %%% Calculate delays for all layers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coord_row = 1:size(obj.xdc.incoords,1)/3;
-    t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
-    icvec = zeros(size(obj.grid_vars.t_axis));
-    icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
-    icmat = average_icmat(obj,focus_transmit(obj,fy,fz,icvec,obj.xdc.incoords(coord_row,:)));
-    for i = 1:layers-1
-        coord_row = i*size(obj.xdc.incoords,1)/3+1:2*size(obj.xdc.incoords,1)/3;
-        tnew=t-i*obj.grid_vars.dT/obj.input_vars.cfl;
-        icvec = interp1(t,icvec,tnew,[],0);
-        icmat_add = average_icmat(obj,focus_transmit(obj,fy,fz,icvec,obj.xdc.incoords(coord_row,:)));
-        icmat = [icmat; icmat_add];
-    end
-    obj.xdc.icmat = icmat;
-    obj.xdc.delays=get_delays(obj,focus);
-    obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
 else
     error('Unsupported transducer type.')
 end
+
+%%% Calculate impulse response and transmitted pulse %%%%%%%%%%%%%%%%%%%%%%
+fy = (focus(1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY+1;
+fz = (focus(2)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ+1;
+tc = gauspuls('cutoff',fc,fbw,bwr,tpe);
+fs=1/obj.grid_vars.dT;
+tv = -tc:1/fs:tc;
+impulse_response = gauspuls(tv,fc,fbw);
+impulse_response = impulse_response-mean(impulse_response);
+obj.xdc.impulse_t = tv;
+obj.xdc.impulse = impulse_response;
+if ~exist('excitation','var')||isempty(excitation)
+    excitation = sin(2*pi*obj.input_vars.f0*(0:1/fs:obj.input_vars.ncycles/obj.input_vars.f0));
+end
+pulse = conv(impulse_response,excitation);
+pulse = pulse/max(abs(pulse));
+obj.xdc.pulse_t = (0:length(pulse)-1)/fs;
+obj.xdc.pulse = pulse;
+obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
+obj.xdc.excitation = excitation;
+
+%%% Calculate delays for all layers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ey = (obj.xdc.out(:,1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
+ez = (obj.xdc.out(:,3)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
+t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
+icvec = zeros(size(obj.grid_vars.t_axis));
+icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
+icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
+icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
+for i = 1:obj.xdc.n
+    indy = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
+    icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1);
+end
+for i = 1:layers-1
+    tnew=t-i*(obj.grid_vars.dT/obj.input_vars.cfl);
+    icvec = interp1(t,icvec,tnew,[],0);
+    icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
+    icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
+    for i = 1:obj.xdc.n
+        ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
+        icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1);
+    end
+    icmat = [icmat; icmat_add];
+end
+
+obj.xdc.icmat = icmat;
+obj.xdc.delays = get_delays(obj,focus);
+obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
 
 end
