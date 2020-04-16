@@ -60,11 +60,15 @@ end
 obj.field_maps.cmap = obj.field_maps.cmap+cscatmap*csr.*obj.field_maps.cmap;
 
 %%% Axial offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-z_standoff = obj.input_vars.c0/obj.input_vars.f0*offset/2; 
-n_shift = find(obj.grid_vars.z_axis>=z_standoff,1); 
+z_standoff = obj.input_vars.c0/obj.input_vars.f0*offset/2;
+n_shift = find(obj.grid_vars.z_axis>=z_standoff,1);
 obj.field_maps.cmap(:,1:n_shift) = obj.input_vars.c0;
 obj.field_maps.rhomap(:,1:n_shift) = obj.input_vars.rho;
 obj.field_maps.attenmap(:,1:n_shift) = obj.input_vars.atten;
-obj.field_maps.Bmap(:,1:n_shift) = obj.input_vars.B;
+if(obj.input_vars.v==1)
+    obj.field_maps.boveramap(:,1:n_shift) = obj.input_vars.boveramap;
+elseif(obj.input_var.v==2)
+    obj.field_maps.Bmap(:,1:n_shift) = obj.input_vars.B;
+end
 
 end

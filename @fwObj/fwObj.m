@@ -29,7 +29,7 @@ classdef fwObj < handle
     %                               field_maps:     Field maps (cmap, rhomap,
     %                                               attenmap, Bmap)
     %
-    %  James Long, 01/16/2019
+    %  James Long, 04/16/2020
     
     properties
         input_vars
