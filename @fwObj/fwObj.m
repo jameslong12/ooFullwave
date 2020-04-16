@@ -128,6 +128,7 @@ classdef fwObj < handle
         
         obj = make_xdc(obj);
         obj = preview_sim(obj);
+        obj = focus_xdc(obj, focus, fc, fbw, excitation, bwr, tpe);
         obj = focus_linear(obj, focus, fc, fbw, excitation, bwr, tpe);
         obj = focus_curvilinear(obj, focus, fc, fbw, excitation, bwr, tpe);
         icmat_avg = average_icmat(obj,icmat);
