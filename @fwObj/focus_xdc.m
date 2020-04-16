@@ -70,7 +70,7 @@ elseif strcmp(obj.xdc.type, 'linear')
         inter = circshift(inmap,[0 -i]);
         incoords = [incoords; make_incoords_row(obj,inter)];
     end
-    inmap(:.1:layers) = 1;
+    inmap(:,1:layers) = 1;
     obj.xdc.inmap = inmap; obj.xdc.incoords = incoords;
     obj.grid_vars.z_axis = obj.grid_vars.z_axis-(layers-1)*obj.grid_vars.dZ;
     

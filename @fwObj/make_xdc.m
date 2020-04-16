@@ -9,7 +9,6 @@ function obj = make_xdc(obj)
 %           obj.xdc.type        - Type of transducer (only 'linear'
 %                                 currently supported)
 %           obj.xdc.pitch       - Center-to-center element spacing (m)
-%           obj.xdc.kerf        - Interelement spacing (m)
 %           obj.xdc.n           - Number of elements
 %           obj.xdc.on_elements - (Optional) Elements selected for transmit
 %                                 (default = 1:obj.xdc.n)
@@ -21,7 +20,6 @@ function obj = make_xdc(obj)
 %                                 (default = [1,1,1])
 %
 %  Returns:
-%           obj.xdc.width       - Element width (m)
 %           obj.xdc.e_ind       - Lateral element indices on grid
 %           obj.xdc.out         - Element positions in [x y z] for beamforming
 %
@@ -29,13 +27,11 @@ function obj = make_xdc(obj)
 
 if obj.grid_vars.dY > obj.xdc.pitch, error('Grid spacing is too large.'); end
 assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
-assert(isfield(obj.xdc,'kerf'),'Unidentified element kerf in obj.xdc.')
 assert(isfield(obj.xdc,'n'),'Unidentified number of elements (n) in obj.xdc.')
 if ~isfield(obj.xdc,'on_elements'); obj.xdc.on_elements = 1:obj.xdc.n; end
 if ~isfield(obj.xdc,'tx_apod'); obj.xdc.tx_apod = ones(length(obj.xdc.on_elements),1); end
 if ~isfield(obj.xdc,'p_size'); obj.xdc.p_size = [1,1,1]; end
 assert(length(obj.xdc.tx_apod)==length(obj.xdc.on_elements),'Transmit apodization must match on elements.');
-obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
 
 if strcmp(obj.xdc.type, 'curvilinear')
     assert(isfield(obj.xdc,'r'),'Unidentified convex radius (r) in obj.xdc.')
@@ -45,7 +41,7 @@ if strcmp(obj.xdc.type, 'curvilinear')
     zp = cos(theta)*obj.xdc.r;
     obj.xdc.out = zeros(obj.xdc.n,3);
     obj.xdc.out(:,1) = yp; obj.xdc.out(:,3) = zp-max(zp);
-    wy = obj.xdc.width*cos(theta);
+    wy = obj.xdc.pitch*cos(theta);
     iy = [yp(:)-wy(:)/2 yp(:)+wy(:)/2];
     [~,e_ind(:,1)] = min(abs(iy(:,1)'-obj.grid_vars.y_axis'));
     [~,e_ind(:,2)] = min(abs(iy(:,2)'-obj.grid_vars.y_axis'));
@@ -59,12 +55,11 @@ if strcmp(obj.xdc.type, 'curvilinear')
     obj.xdc.e_ind = e_ind;
     
 elseif strcmp(obj.xdc.type, 'linear')
-    obj.xdc.width = obj.xdc.pitch-obj.xdc.kerf;
     
     obj.xdc.out = zeros(obj.xdc.n,3);
     yp = (1:obj.xdc.n)*obj.xdc.pitch; yp = yp-mean(yp);
     obj.xdc.out(:,1) = yp;
-    iy = [yp(:)-obj.xdc.width/2 yp(:)+obj.xdc.width/2];
+    iy = [yp(:)-obj.xdc.pitch/2 yp(:)+obj.xdc.pitch/2];
     [~,e_ind(:,1)] = min(abs(iy(:,1)'-obj.grid_vars.y_axis'));
     [~,e_ind(:,2)] = min(abs(iy(:,2)'-obj.grid_vars.y_axis'));
     for i = 1:size(e_ind,1)-1
