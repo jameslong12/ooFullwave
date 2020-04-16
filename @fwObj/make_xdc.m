@@ -27,9 +27,6 @@ function obj = make_xdc(obj)
 %
 %  James Long 04/16/2020
 
-obj.xdc.inmap = zeros(size(obj.field_maps.cmap));
-obj.xdc.outmap = zeros(size(obj.field_maps.cmap));
-
 if obj.grid_vars.dY > obj.xdc.pitch, error('Grid spacing is too large.'); end
 assert(isfield(obj.xdc,'pitch'),'Unidentified element pitch in obj.xdc.')
 assert(isfield(obj.xdc,'kerf'),'Unidentified element kerf in obj.xdc.')

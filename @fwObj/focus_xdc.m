@@ -23,7 +23,7 @@ function obj = focus_xdc(obj, focus, fc, fbw, excitation, bwr, tpe)
 %           obj.xdc.delays      - Time delays on elements in transmit
 %           obj.xdc.t0          - Time of first time index (s) for beamforming
 %
-%  James Long 12/06/2018
+%  James Long 04/16/2020
 
 if ~exist('fc','var')||isempty(fc), fc = obj.input_vars.f0; end
 if ~exist('fbw','var')||isempty(fbw), fbw = 0.8; end
@@ -157,4 +157,6 @@ elseif strcmp(obj.xdc.type, 'linear')
     obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
 else
     error('Unsupported transducer type.')
+end
+
 end
