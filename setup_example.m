@@ -1,10 +1,10 @@
-%  ooFullwave, v2.3.0
+%  ooFullwave, v2.4.0
 %
 %  Examples using fwObj to setup and run Fullwave simulations for focused,
 %  plane wave, and diverging transmits on linear arrays. Includes examples
 %  with abdominal walls and adding scatterers.
 %
-%  James Long 04/01/2020
+%  James Long 04/16/2020
 %  ***Fullwave written by Gianmarco Pinton***
 
 %% Setup fwObj for varying transmit cases %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,7 +23,6 @@ sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td);
 %%% Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sim.xdc.type = 'linear';                    % Curvilinear or linear
 sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
-sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
 sim.xdc.n = 64;                             % Number of elements
 sim.make_xdc();                             % Call make_xdc to set up transducer
 
@@ -77,7 +76,6 @@ sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td);
 %%% Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sim.xdc.type = 'linear';                    % Curvilinear or linear
 sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
-sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
 sim.xdc.n = 64;                             % Number of elements
 sim.make_xdc();                             % Call make_xdc to set up transducer
 

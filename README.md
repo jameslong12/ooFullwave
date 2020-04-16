@@ -47,7 +47,6 @@ First, we will call `fwObj()` to initialize the simulation object. In this examp
 %%% Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sim.xdc.type = 'linear';                    % Curvilinear or linear
 sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
-sim.xdc.kerf = 3.25e-5;                     % Interelement spacing
 sim.xdc.n = 64;                             % Number of elements
 sim.make_xdc();                             % Call make_xdc to set up transducer
 ```
