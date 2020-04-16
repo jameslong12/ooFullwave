@@ -29,7 +29,7 @@ sim.focus_xdc(focus);                           % Call focus_xdc to calculate ic
 
 % 4. Add abdominal wall and speckle %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sim.add_wall('r75hi');                          % Mast abdominal wall name
-sim.make_speckle('nscat',25);                   % Add 25 scat/res cell
+sim.add_speckle('nscat',25);                    % Add 25 scat/res cell
 
 % 5. Preview simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all

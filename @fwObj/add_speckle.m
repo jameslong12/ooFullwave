@@ -1,9 +1,9 @@
-function obj = make_speckle(obj, varargin)
+function obj = add_speckle(obj, varargin)
 
 %  Function to add scatterers and optional cyst(s) to map
 %
 %  Calling:
-%           obj.make_speckle('nscat',15,'csr',0.05,'nC',0)
+%           obj.add_speckle('nscat',15,'csr',0.05,'nC',0)
 %
 %  Optional parameters:
 %           nscat:      Scatterers per resolution cell (15)
@@ -13,7 +13,7 @@ function obj = make_speckle(obj, varargin)
 %           cC:         Matrix of cyst center locations in [y,z] (m), length equal to nC
 %           zC:         Vector of cyst impedance contrast, length equal to nC
 %
-%  James Long, 12/17/2018 (Code partially from Nick Bottenus)
+%  James Long, 04/16/2020 (Code partially from Nick Bottenus)
 
 %%% Use inputParser to set optional parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 p = inputParser;
@@ -58,18 +58,6 @@ end
 obj.field_maps.cmap = obj.field_maps.cmap+cscatmap*csr.*obj.field_maps.cmap;
 
 %%% Axial offset %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ax = 2*obj.input_vars.ppw;
-% z_standoff = obj.input_vars.c0/obj.input_vars.f0*offset/2;
-% n_shift = find(obj.grid_vars.z_axis>=z_standoff,1);
-% obj.field_maps.cmap(:,1:n_shift) = obj.input_vars.c0;
-% obj.field_maps.rhomap(:,1:n_shift) = obj.input_vars.rho;
-% obj.field_maps.attenmap(:,1:n_shift) = obj.input_vars.atten;
-% if(obj.input_vars.v==1)
-%     obj.field_maps.boveramap(:,1:n_shift) = obj.input_vars.boveramap;
-% elseif(obj.input_var.v==2)
-%     obj.field_maps.Bmap(:,1:n_shift) = obj.input_vars.B;
-% end
-
 ax = 2*obj.input_vars.ppw;
 for i = 1:size(obj.xdc.inmap,1)
     int = find(obj.xdc.inmap(i,:)==1,1,'last');
