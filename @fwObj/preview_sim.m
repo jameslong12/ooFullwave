@@ -1,9 +1,20 @@
 function obj = preview_sim(obj)
 
+%  Method to preview simulation. Shows acoustic map with transducer,
+%  initial condition matrix, transmit delays, transducer impulse response,
+%  and transmitted pulse.
+%
+%  Calling:
+%           obj.preview_sim()
+%
+%  James Long 04/16/2020
+
 close all
 figure('pos',[100 100 1400 600])
 subplot(131)
 imagesc(obj.grid_vars.y_axis*1e3,obj.grid_vars.z_axis*1e3,obj.field_maps.cmap'); axis image
+hold on
+plot(obj.xdc.out(:,1)*1e3,obj.xdc.out(:,3)*1e3,'-k','linewidth',2);
 xlabel('Lateral (mm)'); ylabel('Axial (mm)'); title('Acoustic map');
 
 subplot(232)

@@ -29,7 +29,7 @@ classdef fwObj < handle
     %                               field_maps:     Field maps (cmap, rhomap,
     %                                               attenmap, Bmap)
     %
-    %  James Long, 01/16/2019
+    %  James Long, 04/16/2020
     
     properties
         input_vars
@@ -126,18 +126,22 @@ classdef fwObj < handle
             
         end
         
+        % Self-referential methods
         obj = make_xdc(obj);
-        obj = preview_sim(obj);
-        obj = focus_linear(obj, focus, fc, fbw, excitation, bwr, tpe);
-        icmat_avg = average_icmat(obj,icmat);
-        delays = get_delays(focus,rx_pos,c);
-        obj = make_speckle(obj, varargin);
-        obj = make_points(obj, varargin)
+        obj = focus_xdc(obj, focus, fc, fbw, excitation, bwr, tpe);
         obj = add_wall(obj, wall_name, offset, filt_size);
+        obj = add_speckle(obj, varargin);
+        obj = add_points(obj, varargin)
         obj = add_fii_phantom(obj, phtm_file, symmetry, el_lim, csr, fnum)
+        obj = preview_sim(obj);
+        
+        % Output methods
         rf = do_sim(obj, field_flag);
         acq_params = make_acq_params(obj);
         
+        % Latent methods
+        incoords = make_incoords_row(obj,inmap)
+        delays = get_delays(focus,rx_pos,c);
     end
     
 end

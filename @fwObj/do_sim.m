@@ -18,17 +18,14 @@ function out = do_sim(obj, field_flag)
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
 if field_flag
+    % redefine outmap and outcoords
     dY=1:obj.xdc.p_size(2):obj.grid_vars.nY;
     dZ=1:obj.xdc.p_size(3):obj.grid_vars.nZ;
     obj.xdc.outmap(dY,dZ) = 1;
     obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
-else
-    obj.xdc.outmap = obj.xdc.inmap;
-    obj.xdc.outcoords = mapToCoords(obj.xdc.outmap);
 end
 
 %%% Launch FullWave executable %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-echo off
 if obj.input_vars.v == 2
     fprintf('    Launching Fullwave version 2\n')
     if isunix
@@ -65,7 +62,6 @@ else
         error('Fullwave is not supported on your operating system.')
     end
 end
-echo on
 
 %%% Reshape output data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ncoordsout=size(obj.xdc.outcoords,1);
@@ -77,7 +73,8 @@ if field_flag
     out = out(1:obj.xdc.p_size(1):end,:,:);
 else
     for idx = 1:size(obj.xdc.outcoords)
-        genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
+%         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
+        genout_re(:,obj.xdc.outcoords(idx,1)+1) = genout(:,idx);
     end
 
     %%% Average across output to reconstruct element traces %%%%%%%%%%%%%%%
