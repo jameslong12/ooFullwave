@@ -17,7 +17,7 @@ ppw = 12;
 sim = fwObj('c0',c0,'f0',f0,'wY',wY,'wZ',wZ,'td',td,'ppw',ppw);
 
 % 2. Specify transducer and transmit parameters %%%%%%%%%%%%%%%%%%%%%%%%%%
-sim.xdc.type = 'curvilinear';                    % Curvilinear or linear
+sim.xdc.type = 'linear';                    % Curvilinear or linear
 sim.xdc.pitch = 0.000412;                   % Center-to-center element spacing
 sim.xdc.kerf = 6.25e-5;                     % Interelement spacing
 sim.xdc.n = 192;                             % Number of elements
