@@ -26,7 +26,6 @@ if field_flag
 end
 
 %%% Launch FullWave executable %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-echo off
 if obj.input_vars.v == 2
     fprintf('    Launching Fullwave version 2\n')
     if isunix
@@ -63,7 +62,6 @@ else
         error('Fullwave is not supported on your operating system.')
     end
 end
-echo on
 
 %%% Reshape output data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ncoordsout=size(obj.xdc.outcoords,1);
