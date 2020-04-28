@@ -106,18 +106,23 @@ icvec = zeros(size(obj.grid_vars.t_axis));
 icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
 icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
 icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
-for i = 1:obj.xdc.n
+
+ct = 0;
+for i = obj.xdc.on_elements
+    ct = ct+1;
     indy = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-    icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1);
+    icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1)*obj.xdc.tx_apod(ct);
 end
 for i = 1:layers-1
     tnew=t-i*(obj.grid_vars.dT/obj.input_vars.cfl);
     icvec = interp1(t,icvec,tnew,[],0);
     icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
     icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
-    for i = 1:obj.xdc.n
+    ct = 0;
+    for i = obj.xdc.on_elements
+        ct = ct+1;
         ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-        icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1);
+        icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1)*obj.xdc.tx_apod(ct);
     end
     icmat = [icmat; icmat_add];
 end
