@@ -29,6 +29,7 @@ if ~exist('fc','var')||isempty(fc), fc = obj.input_vars.f0; end
 if ~exist('fbw','var')||isempty(fbw), fbw = 0.8; end
 if ~exist('bwr','var')||isempty(bwr), bwr=-6; end
 if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
+assert(length(obj.xdc.tx_apod)==length(obj.xdc.on_elements),'Transmit apodization must match on elements.');
 
 %%% Define in/out parameters, shift z_axis %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if strcmp(obj.xdc.type, 'curvilinear') 
