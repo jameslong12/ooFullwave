@@ -128,8 +128,12 @@ for i = 1:layers-1
     icmat = [icmat; icmat_add];
 end
 
+[~,n] = max(icmat~=0,[],2);
+n = min(n(n~=1));
+icmat = circshift(icmat,-n,2);
+
+obj.xdc.focus = focus;
 obj.xdc.icmat = icmat;
 obj.xdc.delays = get_delays(obj,focus);
-obj.xdc.t0 = -(obj.input_vars.ncycles/obj.input_vars.omega0*2*pi);
 
 end
