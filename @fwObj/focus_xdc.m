@@ -109,7 +109,7 @@ icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
 icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
 
 ct = 0;
-for i = obj.xdc.on_elements
+for i = obj.xdc.on_elements(1):obj.xdc.on_elements(end)
     ct = ct+1;
     indy = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
     icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1)*obj.xdc.tx_apod(ct);
@@ -120,7 +120,7 @@ for i = 1:layers-1
     icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
     icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
     ct = 0;
-    for i = obj.xdc.on_elements
+    for i = obj.xdc.on_elements(1):obj.xdc.on_elements(end)
         ct = ct+1;
         ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
         icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1)*obj.xdc.tx_apod(ct);
