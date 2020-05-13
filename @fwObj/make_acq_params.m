@@ -26,12 +26,12 @@ acq_params.rx_pos = obj.xdc.out;
 acq_params.tx_apod = false(obj.xdc.n,1);
 acq_params.tx_apod(obj.xdc.on_elements) = true;
 acq_params.focus = [obj.xdc.focus(1) 0 obj.xdc.focus(2)];
+
 if strcmp(obj.xdc.type,'curvilinear')
-    acq_params.apex = obj.xdc.r;
+    acq_params.apex = -obj.xdc.r;
     acq_params.theta = atand(obj.xdc.focus(1)/(obj.xdc.focus(2)+obj.xdc.r));
     acq_params.tx_pos = [obj.xdc.r*sind(acq_params.theta) 0 ...
         obj.xdc.r*cosd(acq_params.theta)-obj.xdc.r];
-    
 else
     acq_params.apex=0;
     acq_params.theta = atand(obj.xdc.focus(1)/obj.xdc.focus(2));
@@ -47,5 +47,4 @@ foc_pm=sign(obj.xdc.focus(2));
 rx_pos = acq_params.rx_pos(obj.xdc.on_elements,:);
 acq_params.t0_var=foc_pm*(sqrt(sum((acq_params.focus-rx_pos(ind1,:)).^2))-...
     sqrt(sum((acq_params.focus-rx_pos(ind2,:)).^2)))/obj.input_vars.c0/obj.grid_vars.dT;
-
 end
