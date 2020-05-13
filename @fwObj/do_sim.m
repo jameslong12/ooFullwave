@@ -17,6 +17,7 @@ function out = do_sim(obj, field_flag)
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
+if ~exist('gpu','var'), gpu = 0; end
 if field_flag
     % redefine outmap and outcoords
     dY=1:obj.xdc.p_size(2):obj.grid_vars.nY;
@@ -54,10 +55,11 @@ else
             obj.field_maps.cmap', obj.field_maps.rhomap', obj.field_maps.attenmap',...
             obj.field_maps.boveramap', obj.xdc.incoords, obj.xdc.outcoords,...
             obj.xdc.icmat);
-        tic
-        !./try6_nomex
-        %!./try6_nomex_selfcontained_ts
-        toc
+        try
+            !./FullWave2D_PGI_19.10_CUDA_9.1_20200512.gpu_volta
+        catch
+            !./try6_nomex
+        end
     else
         error('Fullwave is not supported on your operating system.')
     end
@@ -68,19 +70,24 @@ ncoordsout=size(obj.xdc.outcoords,1);
 nRun=sizeOfFile('genout.dat')/4/ncoordsout;
 genout = readGenoutSlice(['genout.dat'],0:nRun-1,size(obj.xdc.outcoords,1));
 
+fprintf('   Size genout:\n')
+size(genout)
 if field_flag
     out = reshape(genout,size(genout,1),length(dY),length(dZ));
     out = out(1:obj.xdc.p_size(1):end,:,:);
 else
     for idx = 1:size(obj.xdc.outcoords)
-%         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
+        %         genout_re(:,obj.xdc.outcoords(idx,1)-min(obj.xdc.outcoords(:,1))+1) = genout(:,idx);
         genout_re(:,obj.xdc.outcoords(idx,1)+1) = genout(:,idx);
     end
-
+    fprintf('   Size genout:\n')
+    size(genout_re)
     %%% Average across output to reconstruct element traces %%%%%%%%%%%%%%%
     for idx = 1:obj.xdc.n
         out(:,idx) = mean(genout_re(:,obj.xdc.e_ind(idx,1):obj.xdc.e_ind(idx,2)),2);
     end
+    fprintf('   Size out:\n')
+    size(out)
 end
 
 end
