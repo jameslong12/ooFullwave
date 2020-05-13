@@ -1,4 +1,4 @@
-function out = do_sim(obj, field_flag)
+function out = do_sim(obj,field_flag)
 
 %  Method to call Fullwave executable and perform simulation
 %
@@ -17,7 +17,6 @@ function out = do_sim(obj, field_flag)
 
 %%% Use field flag to get pressure across entire map %%%%%%%%%%%%%%%%%%%%%%
 if ~exist('field_flag','var'), field_flag = 0; end
-if ~exist('gpu','var'), gpu = 0; end
 if field_flag
     % redefine outmap and outcoords
     dY=1:obj.xdc.p_size(2):obj.grid_vars.nY;
@@ -30,6 +29,9 @@ end
 if obj.input_vars.v == 2
     fprintf('    Launching Fullwave version 2\n')
     if isunix
+        if obj.input_vars.gpu
+            warning('GPU version only available for version 1)
+        end
         launch_fullwave2_try6_nln_relaxing4(obj.input_vars.c0,...
             obj.input_vars.omega0, obj.input_vars.wY, obj.input_vars.wZ,...
             obj.input_vars.td, obj.input_vars.p0, obj.input_vars.ppw,...
@@ -41,7 +43,11 @@ if obj.input_vars.v == 2
         error('Fullwave2 is not supported on your operating system.')
     end
 else
+    fprintf('    Launching Fullwave version 2\n')
     if ispc
+        if obj.input_vars.gpu
+            warning('GPU version only available for Linux')
+        end
         launchTotalFullWaveRebuild2(obj.input_vars.c0, obj.input_vars.omega0,...
             obj.input_vars.wY, obj.input_vars.wZ, obj.input_vars.td,...
             obj.input_vars.p0, obj.input_vars.ppw, obj.input_vars.cfl,...
@@ -55,9 +61,9 @@ else
             obj.field_maps.cmap', obj.field_maps.rhomap', obj.field_maps.attenmap',...
             obj.field_maps.boveramap', obj.xdc.incoords, obj.xdc.outcoords,...
             obj.xdc.icmat);
-        try
+        if obj.input_vars.gpu
             !./FullWave2D_PGI_19.10_CUDA_9.1_20200512.gpu_volta
-        catch
+        else
             !./try6_nomex
         end
     else

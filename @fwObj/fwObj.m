@@ -20,7 +20,8 @@ classdef fwObj < handle
     %           rho             - Density in kg/m^3 (1000)
     %           atten           - Attenuation in dB/MHz/cm (0)
     %           B               - Non-linearity parameter (0)
-    %           v               - Version of Fullwave (2)
+    %           v               - Version of Fullwave (1)
+    %           gpu             - GPU flag, version 1 only (0)
     %
     %  Return:
     %           obj             - Simulation object with properties:
@@ -58,7 +59,8 @@ classdef fwObj < handle
             addOptional(p,'bovera',-2)
             addOptional(p,'f0',1e6)
             addOptional(p,'ncycles',2)
-            addOptional(p,'v',2)
+            addOptional(p,'v',1)
+            addOptional(p,'gpu',0)
             
             %%% Parse inputs and extract variables from p %%%%%%%%%%%%%%%%%
             p.parse(varargin{:})
@@ -104,7 +106,8 @@ classdef fwObj < handle
                 'f0',f0,...
                 'omega0',omega0,...
                 'lambda',lambda,...
-                'v',v);
+                'v',v,...
+                'gpu',gpu);
             
             obj.grid_vars = struct('nY',nY,...
                 'nZ',nZ,...
