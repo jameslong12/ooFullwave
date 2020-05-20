@@ -32,7 +32,7 @@ if ~exist('tpe','var')||isempty(tpe), tpe=-40; end
 assert(length(obj.xdc.tx_apod)==length(obj.xdc.on_elements),'Transmit apodization must match on elements.');
 
 %%% Define in/out parameters, shift z_axis %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if strcmp(obj.xdc.type, 'curvilinear') 
+if strcmp(obj.xdc.type, 'curvilinear')
     layers = 5;
     sector = obj.xdc.pitch*obj.xdc.n; theta_xdc = sector/obj.xdc.r;
     theta = linspace(-theta_xdc/2,theta_xdc/2,obj.xdc.n);
@@ -60,7 +60,7 @@ if strcmp(obj.xdc.type, 'curvilinear')
     obj.xdc.inmap = inmap; obj.xdc.incoords = incoords;
     obj.grid_vars.z_axis = obj.grid_vars.z_axis-max(zp)-(layers-1)*obj.grid_vars.dZ;
     
-elseif strcmp(obj.xdc.type, 'linear')    
+elseif strcmp(obj.xdc.type, 'linear')
     layers = 3;
     inmap = zeros(size(obj.field_maps.cmap));
     inmap(:,layers) = 1;
@@ -100,8 +100,16 @@ obj.xdc.excitation_t = (0:length(excitation)-1)/fs;
 obj.xdc.excitation = excitation;
 
 %%% Calculate delays for all layers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ey = (obj.xdc.out(:,1)-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
-ez = (obj.xdc.out(:,3)-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
+ey1 = min(obj.xdc.e_ind(min(obj.xdc.on_elements),:));
+ey2 = max(obj.xdc.e_ind(max(obj.xdc.on_elements),:));
+ey = obj.grid_vars.y_axis(ey1:ey2);
+if strcmp(obj.xdc.type, 'curvilinear')
+    ez = sqrt(obj.xdc.r^2-ey.^2)-obj.xdc.r;
+else
+    ez = zeros(size(ey));
+end
+ey = (ey-obj.grid_vars.y_axis(1))/obj.grid_vars.dY;
+ez = (ez-obj.grid_vars.z_axis(1))/obj.grid_vars.dZ;
 t = (0:obj.grid_vars.nT-1)/obj.grid_vars.nT*obj.input_vars.td-obj.input_vars.ncycles/obj.input_vars.omega0*2*pi;
 icvec = zeros(size(obj.grid_vars.t_axis));
 icvec(1:length(pulse)) = pulse*obj.input_vars.p0;
@@ -109,10 +117,10 @@ icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
 icmat = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
 
 ct = 0;
-for i = obj.xdc.on_elements(1):obj.xdc.on_elements(end)
+for i = ey1:ey2
     ct = ct+1;
-    indy = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-    icmat(indy,:) = repmat(icmat_sub(i,:),numel(indy),1)*obj.xdc.tx_apod(ct);
+    idx = find(i>=obj.xdc.e_ind(:,1)&i<=obj.xdc.e_ind(:,2));
+    icmat(i,:) = icmat_sub(ct,:)*obj.xdc.tx_apod(obj.xdc.on_elements == idx);
 end
 for i = 1:layers-1
     tnew=t-i*(obj.grid_vars.dT/obj.input_vars.cfl);
@@ -120,10 +128,10 @@ for i = 1:layers-1
     icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
     icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
     ct = 0;
-    for i = obj.xdc.on_elements(1):obj.xdc.on_elements(end)
+    for i = ey1:ey2
         ct = ct+1;
-        ind = obj.xdc.e_ind(i,1):obj.xdc.e_ind(i,2);
-        icmat_add(ind,:) = repmat(icmat_sub(i,:),numel(ind),1)*obj.xdc.tx_apod(ct);
+        idx = find(i>=obj.xdc.e_ind(:,1)&i<=obj.xdc.e_ind(:,2));
+        icmat_add(i,:) = icmat_sub(ct,:)*obj.xdc.tx_apod(obj.xdc.on_elements == idx);
     end
     icmat = [icmat; icmat_add];
 end
