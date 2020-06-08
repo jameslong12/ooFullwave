@@ -43,7 +43,7 @@ if obj.input_vars.v == 2
         error('Fullwave2 is not supported on your operating system.')
     end
 else
-    fprintf('    Launching Fullwave version 2\n')
+    fprintf('    Launching Fullwave version 1\n')
     if ispc
         if obj.input_vars.gpu
             warning('GPU version only available for Linux')
@@ -62,6 +62,7 @@ else
             obj.field_maps.boveramap', obj.xdc.incoords, obj.xdc.outcoords,...
             obj.xdc.icmat);
         if obj.input_vars.gpu
+            fprintf('       Using GPU version\n')
             !./FullWave2D_PGI_19.10_CUDA_9.1_20200512.gpu_volta
         else
             !./try6_nomex
