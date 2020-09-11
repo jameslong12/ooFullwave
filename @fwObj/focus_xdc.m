@@ -123,7 +123,7 @@ for i = ey1:ey2
     icmat(i,:) = icmat_sub(ct,:)*obj.xdc.tx_apod(obj.xdc.on_elements == idx);
 end
 for i = 1:layers-1
-    tnew=t-(obj.grid_vars.dT/obj.input_vars.cfl);
+    tnew=t-(obj.grid_vars.dZ/obj.input_vars.c0);
     icvec = interp1(t,icvec,tnew,[],0);
     icmat_sub = focus_transmit(obj,fy,fz,icvec,[ey(:) ez(:)]);
     icmat_add = zeros(obj.grid_vars.nY,obj.grid_vars.nT);
